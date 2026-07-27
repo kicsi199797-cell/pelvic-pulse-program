@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "../components/AppShell";
 import { Dumbbell, Heart, TrendingUp, ArrowLeft } from "lucide-react";
+import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  const { t } = useI18n();
   return (
     <AppShell>
       <div className="flex flex-col gap-6 px-6 pb-28 pt-12">
@@ -23,49 +25,27 @@ function AboutPage() {
             <ArrowLeft size={22} />
           </Link>
           <div>
-            <h1 className="font-display text-3xl font-bold">About</h1>
+            <h1 className="font-display text-3xl font-bold">{t("about.title")}</h1>
           </div>
         </header>
 
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Stamina Trainer is a guided 90-day pelvic floor training program designed for men. It combines simple, proven exercises with a progressive structure to build strength, control, and awareness over time.
-        </p>
+        <p className="text-sm leading-relaxed text-muted-foreground">{t("about.intro")}</p>
 
         <div className="grid gap-4">
-          <Card
-            icon={<Dumbbell size={22} className="text-primary" />}
-            title="Guided Workouts"
-            body="Each session walks you through two foundational techniques: Hold and Push. Clear timers and audio cues keep you in rhythm without guesswork."
-          />
-          <Card
-            icon={<TrendingUp size={22} className="text-primary" />}
-            title="Progressive Levels"
-            body="20 carefully scaled levels gradually increase duration and challenge over roughly 90 days, helping your muscles adapt safely."
-          />
-          <Card
-            icon={<Heart size={22} className="text-primary" />}
-            title="Health-First Design"
-            body="The program is built around consistency, comfort, and technique. No intensity spikes — just steady, sustainable practice."
-          />
+          <Card icon={<Dumbbell size={22} className="text-primary" />} title={t("about.guidedTitle")} body={t("about.guidedBody")} />
+          <Card icon={<TrendingUp size={22} className="text-primary" />} title={t("about.progTitle")} body={t("about.progBody")} />
+          <Card icon={<Heart size={22} className="text-primary" />} title={t("about.healthTitle")} body={t("about.healthBody")} />
         </div>
 
         <div className="rounded-2xl border border-border/60 bg-card/60 p-4 text-center text-sm text-muted-foreground">
-          Stamina Trainer is for general wellness and educational purposes. It is not medical advice. Consult a healthcare professional before starting any exercise program.
+          {t("about.disclaimer")}
         </div>
       </div>
     </AppShell>
   );
 }
 
-function Card({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+function Card({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
     <div className="rounded-2xl border border-border/60 bg-card/60 p-5">
       <div className="mb-3 flex items-center gap-3">

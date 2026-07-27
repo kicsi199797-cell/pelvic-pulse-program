@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Activity, Hand, ArrowDown, Sparkles } from "lucide-react";
 import { AppShell } from "../components/AppShell";
+import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/learn")({
   head: () => ({
@@ -15,56 +16,47 @@ export const Route = createFileRoute("/learn")({
 });
 
 function LearnPage() {
+  const { t } = useI18n();
   return (
     <AppShell>
       <div className="flex flex-col gap-5 px-6 pb-12 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            Education
+            {t("learn.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">How It Works</h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Two simple exercises, practiced daily, to build strength and control.
-          </p>
+          <h1 className="mt-1 font-display text-3xl font-bold">{t("learn.title")}</h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("learn.subtitle")}</p>
         </header>
 
         <Card
           icon={<Activity size={22} className="text-primary" />}
-          title="What are the pelvic floor muscles?"
-          body="The pelvic floor muscles support the bladder, bowel, and sexual function. Training these muscles can improve strength, endurance, muscle control, and body awareness."
+          title={t("learn.whatTitle")}
+          body={t("learn.whatBody")}
         />
 
         <Card
           icon={<Hand size={22} className="text-primary" />}
-          title="HOLD (Contract)"
-          body="Imagine you are trying to stop the flow of urine or prevent passing gas. Gently lift and squeeze the muscles upward without tightening your abs, glutes, or thighs."
-          bullets={[
-            "A gentle lifting sensation.",
-            "A controlled muscle contraction.",
-            "Normal breathing throughout the exercise.",
-          ]}
+          title={t("learn.holdTitle")}
+          body={t("learn.holdBody")}
+          bullets={[t("learn.holdB1"), t("learn.holdB2"), t("learn.holdB3")]}
         />
 
         <Card
           icon={<ArrowDown size={22} className="text-primary" />}
-          title="PUSH"
-          body="Instead of squeezing upward, gently push the pelvic floor downward, as if beginning to urinate or pass gas. This should be a gentle movement, never a strong strain."
-          bullets={[
-            "A gentle downward release.",
-            "Relaxation rather than contraction.",
-            "No pain or excessive pressure.",
-          ]}
+          title={t("learn.pushTitle")}
+          body={t("learn.pushBody")}
+          bullets={[t("learn.pushB1"), t("learn.pushB2"), t("learn.pushB3")]}
         />
 
         <Card
           icon={<Sparkles size={22} className="text-primary" />}
-          title="Important Tips"
+          title={t("learn.tipsTitle")}
           bullets={[
-            "Never hold your breath.",
-            "Keep your stomach, thighs, and buttocks relaxed.",
-            "Breathe naturally.",
-            "Stop if you feel pain or discomfort.",
-            "Consistency is more important than intensity.",
+            t("learn.tipsB1"),
+            t("learn.tipsB2"),
+            t("learn.tipsB3"),
+            t("learn.tipsB4"),
+            t("learn.tipsB5"),
           ]}
         />
 
@@ -72,7 +64,7 @@ function LearnPage() {
           to="/"
           className="mt-4 flex w-full items-center justify-center rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.72_0.16_235/0.7)] transition-transform active:scale-[0.98]"
         >
-          Start Training
+          {t("learn.start")}
         </Link>
       </div>
     </AppShell>

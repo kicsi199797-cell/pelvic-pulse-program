@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import { detectBrowserLanguage, isSupportedLanguage, type LanguageCode } from "./i18n";
 
 const KEY = "stamina-trainer-settings-v1";
 
 export type Appearance = "system" | "dark" | "light";
 
 export type Settings = {
-  language: string;
+  language: LanguageCode;
   reminderEnabled: boolean;
   reminderTime: string;
   vibration: boolean;
@@ -13,8 +14,7 @@ export type Settings = {
   appearance: Appearance;
 };
 
-const initial: Settings = {
-  language: "en",
+const baseDefaults: Omit<Settings, "language"> = {
   reminderEnabled: false,
   reminderTime: "20:00",
   vibration: true,
@@ -22,14 +22,28 @@ const initial: Settings = {
   appearance: "system",
 };
 
+function makeInitial(language: LanguageCode = "en"): Settings {
+  return { language, ...baseDefaults };
+}
+
 function load(): Settings {
-  if (typeof window === "undefined") return initial;
+  if (typeof window === "undefined") return makeInitial("en");
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return initial;
-    return { ...initial, ...JSON.parse(raw) };
+    if (!raw) {
+      // First launch: auto-detect device language.
+      const detected = detectBrowserLanguage();
+      const next = makeInitial(detected);
+      try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {}
+      return next;
+    }
+    const parsed = JSON.parse(raw) as Partial<Settings>;
+    const language = parsed.language && isSupportedLanguage(parsed.language)
+      ? (parsed.language as LanguageCode)
+      : detectBrowserLanguage();
+    return { ...makeInitial(language), ...parsed, language };
   } catch {
-    return initial;
+    return makeInitial(detectBrowserLanguage());
   }
 }
 
@@ -40,7 +54,7 @@ function save(s: Settings) {
 }
 
 export function useSettings() {
-  const [settings, setSettings] = useState<Settings>(initial);
+  const [settings, setSettings] = useState<Settings>(() => makeInitial("en"));
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -57,8 +71,9 @@ export function useSettings() {
   }, []);
 
   const reset = useCallback(() => {
-    save(initial);
-    setSettings(initial);
+    const fresh = makeInitial(detectBrowserLanguage());
+    save(fresh);
+    setSettings(fresh);
   }, []);
 
   return { settings, hydrated, update, reset };
