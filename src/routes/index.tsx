@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Play, Flame, Trophy, Calendar } from "lucide-react";
+import { Play, Flame, Trophy, Calendar, Settings } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
 import { getLevel, TOTAL_LEVELS, WORKOUTS_PER_LEVEL, REPS_PER_PHASE } from "../lib/program";
@@ -31,11 +31,20 @@ function Home() {
             </div>
             <h1 className="mt-1 font-display text-2xl font-bold">Day {progress.currentDay}</h1>
           </div>
-          <div className="rounded-full border border-border/60 bg-card/70 px-4 py-2 text-right">
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Level</div>
-            <div className="font-display text-lg font-bold text-primary">
-              {String(progress.currentLevel).padStart(2, "0")}
-              <span className="text-muted-foreground">/{TOTAL_LEVELS}</span>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/settings"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Settings"
+            >
+              <Settings size={20} />
+            </Link>
+            <div className="rounded-full border border-border/60 bg-card/70 px-4 py-2 text-right">
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Level</div>
+              <div className="font-display text-lg font-bold text-primary">
+                {String(progress.currentLevel).padStart(2, "0")}
+                <span className="text-muted-foreground">/{TOTAL_LEVELS}</span>
+              </div>
             </div>
           </div>
         </header>
