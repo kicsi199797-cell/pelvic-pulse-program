@@ -1,4 +1,4 @@
-export const en = {
+const enConst = {
   nav: { train: "Train", progress: "Progress", learn: "Learn" },
   common: { goHome: "Go home", tryAgain: "Try again" },
   notFound: {
@@ -149,5 +149,7 @@ export const en = {
   },
 } as const;
 
-export type Dict = typeof en;
+type Widen<T> = T extends string ? string : { [K in keyof T]: Widen<T[K]> };
+export type Dict = Widen<typeof enConst>;
+export const en: Dict = enConst;
 export default en;
