@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useSettings, type Appearance } from "../lib/useSettings";
+import { useI18n, SUPPORTED_LANGUAGES, type LanguageCode } from "../lib/i18n";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const { settings, hydrated, update } = useSettings();
+  const { t, setLanguage } = useI18n();
 
   if (!hydrated) {
     return (
@@ -46,30 +48,33 @@ function SettingsPage() {
       <div className="flex flex-col gap-6 px-6 pb-28 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            Preferences
+            {t("settings.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">Settings</h1>
+          <h1 className="mt-1 font-display text-3xl font-bold">{t("settings.title")}</h1>
         </header>
 
         <section className="flex flex-col gap-3">
-          <SectionLabel>Training</SectionLabel>
+          <SectionLabel>{t("settings.training")}</SectionLabel>
 
-          <Row icon={<Globe size={20} />} label="Language">
+          <Row icon={<Globe size={20} />} label={t("settings.language")}>
             <select
               value={settings.language}
-              onChange={(e) => update({ language: e.target.value })}
-              className="rounded-lg border border-border/60 bg-background px-2 py-1 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
+              onChange={(e) => {
+                const code = e.target.value as LanguageCode;
+                update({ language: code });
+                setLanguage(code);
+              }}
+              className="max-w-[10rem] rounded-lg border border-border/60 bg-background px-2 py-1 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
             >
-              <option value="en">English</option>
-              <option value="es">Español</option>
-              <option value="fr">Français</option>
-              <option value="de">Deutsch</option>
-              <option value="it">Italiano</option>
-              <option value="pt">Português</option>
+              {SUPPORTED_LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.flag} {l.label}
+                </option>
+              ))}
             </select>
           </Row>
 
-          <Row icon={<Bell size={20} />} label="Daily Reminder">
+          <Row icon={<Bell size={20} />} label={t("settings.dailyReminder")}>
             <div className="flex items-center gap-3">
               {settings.reminderEnabled && (
                 <input
@@ -86,27 +91,27 @@ function SettingsPage() {
             </div>
           </Row>
 
-          <Row icon={<Smartphone size={20} />} label="Vibration">
+          <Row icon={<Smartphone size={20} />} label={t("settings.vibration")}>
             <Switch
               checked={settings.vibration}
               onChange={() => update({ vibration: !settings.vibration })}
             />
           </Row>
 
-          <Row icon={<Volume2 size={20} />} label="Sound Effects">
+          <Row icon={<Volume2 size={20} />} label={t("settings.soundEffects")}>
             <Switch
               checked={settings.soundEffects}
               onChange={() => update({ soundEffects: !settings.soundEffects })}
             />
           </Row>
 
-          <Row icon={<Moon size={20} />} label="Appearance">
+          <Row icon={<Moon size={20} />} label={t("settings.appearance")}>
             <SegmentedControl
               value={settings.appearance}
               options={[
-                { value: "system", label: "System" },
-                { value: "dark", label: "Dark" },
-                { value: "light", label: "Light" },
+                { value: "system", label: t("settings.system") },
+                { value: "dark", label: t("settings.dark") },
+                { value: "light", label: t("settings.light") },
               ]}
               onChange={(v) => update({ appearance: v as Appearance })}
             />
@@ -114,20 +119,20 @@ function SettingsPage() {
         </section>
 
         <section className="flex flex-col gap-3">
-          <SectionLabel>App</SectionLabel>
+          <SectionLabel>{t("settings.app")}</SectionLabel>
 
-          <LinkRow icon={<BarChart3 size={20} />} label="Training Statistics" to="/progress" />
-          <LinkRow icon={<Info size={20} />} label="About" to="/about" />
-          <LinkRow icon={<Shield size={20} />} label="Privacy Policy" to="/privacy" />
-          <LinkRow icon={<FileText size={20} />} label="Terms of Use" to="/terms" />
+          <LinkRow icon={<BarChart3 size={20} />} label={t("settings.trainingStats")} to="/progress" />
+          <LinkRow icon={<Info size={20} />} label={t("settings.about")} to="/about" />
+          <LinkRow icon={<Shield size={20} />} label={t("settings.privacy")} to="/privacy" />
+          <LinkRow icon={<FileText size={20} />} label={t("settings.terms")} to="/terms" />
 
           <button
-            onClick={() => alert("Thanks for your support! Rating dialog coming soon.")}
+            onClick={() => alert(t("settings.rateAlert"))}
             className="group flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4 text-left transition-colors hover:bg-card"
           >
             <div className="flex items-center gap-3">
-              <div className="text-primary">{<Star size={20} />}</div>
-              <span className="text-sm font-medium">Rate the App</span>
+              <div className="text-primary"><Star size={20} /></div>
+              <span className="text-sm font-medium">{t("settings.rate")}</span>
             </div>
             <ChevronRight size={18} className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
           </button>
@@ -137,14 +142,14 @@ function SettingsPage() {
             className="group flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4 text-left transition-colors hover:bg-card"
           >
             <div className="flex items-center gap-3">
-              <div className="text-primary">{<Mail size={20} />}</div>
-              <span className="text-sm font-medium">Contact Support</span>
+              <div className="text-primary"><Mail size={20} /></div>
+              <span className="text-sm font-medium">{t("settings.contact")}</span>
             </div>
             <ChevronRight size={18} className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
           </a>
         </section>
 
-        <div className="text-center text-xs text-muted-foreground">Stamina Trainer v1.0</div>
+        <div className="text-center text-xs text-muted-foreground">{t("settings.version")}</div>
       </div>
     </AppShell>
   );
@@ -158,15 +163,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Row({
-  icon,
-  label,
-  children,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  children: React.ReactNode;
-}) {
+function Row({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4">
       <div className="flex items-center gap-3">

@@ -3,6 +3,7 @@ import { Check, Lock } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
 import { allLevels, TOTAL_LEVELS, WORKOUTS_PER_LEVEL } from "../lib/program";
+import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/progress")({
   head: () => ({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/progress")({
 
 function ProgressPage() {
   const { progress, reset } = useProgress();
+  const { t, formatNumber } = useI18n();
   const levels = allLevels();
   const completedLevels = progress.currentLevel - 1;
   const completionPct = Math.round(
@@ -29,23 +31,23 @@ function ProgressPage() {
       <div className="flex flex-col gap-6 px-6 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            Your Journey
+            {t("progress.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">Progress</h1>
+          <h1 className="mt-1 font-display text-3xl font-bold">{t("progress.title")}</h1>
         </header>
 
         <div className="grid grid-cols-2 gap-3">
-          <Metric label="Completed Levels" value={`${completedLevels}/${TOTAL_LEVELS}`} />
-          <Metric label="Current Level" value={String(progress.currentLevel)} />
-          <Metric label="Days Completed" value={String(progress.currentDay - 1)} />
-          <Metric label="Completion" value={`${completionPct}%`} />
-          <Metric label="Streak" value={`${progress.streak}d`} />
-          <Metric label="Longest Streak" value={`${progress.longestStreak}d`} />
+          <Metric label={t("progress.completedLevels")} value={`${formatNumber(completedLevels)}/${TOTAL_LEVELS}`} />
+          <Metric label={t("progress.currentLevel")} value={formatNumber(progress.currentLevel)} />
+          <Metric label={t("progress.daysCompleted")} value={formatNumber(progress.currentDay - 1)} />
+          <Metric label={t("progress.completion")} value={`${formatNumber(completionPct)}%`} />
+          <Metric label={t("progress.streak")} value={t("progress.daysShort", { n: formatNumber(progress.streak) })} />
+          <Metric label={t("progress.longestStreak")} value={t("progress.daysShort", { n: formatNumber(progress.longestStreak) })} />
         </div>
 
         <section>
           <div className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-            Levels
+            {t("progress.levels")}
           </div>
           <div className="flex flex-col gap-2">
             {levels.map((l) => {
@@ -76,15 +78,15 @@ function ProgressPage() {
                       {completed ? <Check size={18} /> : locked ? <Lock size={14} /> : l.level}
                     </div>
                     <div>
-                      <div className="font-display text-base font-bold">Level {l.level}</div>
+                      <div className="font-display text-base font-bold">{t("progress.levelN", { n: l.level })}</div>
                       <div className="text-xs text-muted-foreground">
-                        Hold {l.holdWork}s · Rest {l.holdRest}s
+                        {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })}
                       </div>
                     </div>
                   </div>
                   {current && (
                     <div className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
-                      Active
+                      {t("progress.active")}
                     </div>
                   )}
                 </div>
@@ -95,11 +97,11 @@ function ProgressPage() {
 
         <button
           onClick={() => {
-            if (confirm("Reset all progress?")) reset();
+            if (confirm(t("progress.resetConfirm"))) reset();
           }}
           className="mt-2 rounded-2xl border border-border/60 bg-card/40 py-3 text-sm text-muted-foreground hover:text-foreground"
         >
-          Reset progress
+          {t("progress.reset")}
         </button>
       </div>
     </AppShell>

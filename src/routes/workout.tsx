@@ -5,6 +5,8 @@ import { AppShell } from "../components/AppShell";
 import { CircularTimer } from "../components/CircularTimer";
 import { useProgress } from "../lib/useProgress";
 import { getLevel, REPS_PER_PHASE } from "../lib/program";
+import { useI18n } from "../lib/i18n";
+import { useSettings } from "../lib/useSettings";
 
 export const Route = createFileRoute("/workout")({
   head: () => ({
@@ -20,7 +22,6 @@ export const Route = createFileRoute("/workout")({
 
 type Phase = "hold" | "push";
 type Mode = "work" | "rest";
-
 type Step = { phase: Phase; mode: Mode; duration: number; rep: number };
 
 function buildSteps(holdWork: number, holdRest: number, pushWork: number, pushRest: number): Step[] {
@@ -61,6 +62,8 @@ function vibrate(pattern: number | number[]) {
 function Workout() {
   const navigate = useNavigate();
   const { progress, completeWorkout } = useProgress();
+  const { settings } = useSettings();
+  const { t } = useI18n();
   const level = useMemo(() => getLevel(progress.currentLevel), [progress.currentLevel]);
   const steps = useMemo(
     () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest),
@@ -77,9 +80,9 @@ function Workout() {
 
   useEffect(() => {
     setRemaining(step.duration);
-    vibrate(step.mode === "work" ? [80, 40, 80] : 40);
-    beep(step.mode === "work" ? 720 : 480, 160);
-  }, [stepIdx, step.duration, step.mode]);
+    if (settings.vibration) vibrate(step.mode === "work" ? [80, 40, 80] : 40);
+    if (settings.soundEffects) beep(step.mode === "work" ? 720 : 480, 160);
+  }, [stepIdx, step.duration, step.mode, settings.vibration, settings.soundEffects]);
 
   useEffect(() => {
     if (!running || done) return;
@@ -99,19 +102,28 @@ function Workout() {
   useEffect(() => {
     if (done && !completedRef.current) {
       completedRef.current = true;
-      vibrate([120, 80, 120, 80, 240]);
-      beep(880, 300);
+      if (settings.vibration) vibrate([120, 80, 120, 80, 240]);
+      if (settings.soundEffects) beep(880, 300);
       completeWorkout();
     }
-  }, [done, completeWorkout]);
+  }, [done, completeWorkout, settings.vibration, settings.soundEffects]);
 
   if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} />;
 
-  const label = step.mode === "work" ? (step.phase === "hold" ? "HOLD" : "PUSH") : "RELAX";
+  const label = step.mode === "work"
+    ? (step.phase === "hold" ? t("workout.hold") : t("workout.pushU"))
+    : t("workout.relax");
+  const sublabel = step.mode === "work"
+    ? (step.phase === "hold" ? t("workout.contract") : t("workout.pushDown"))
+    : t("workout.release");
+  const instr = step.mode === "work"
+    ? (step.phase === "hold" ? t("workout.contractInstr") : t("workout.pushInstr"))
+    : t("workout.relaxInstr");
   const totalSteps = steps.length;
   const workoutProgress = (stepIdx + (1 - remaining / step.duration)) / totalSteps;
   const stepProgress = 1 - remaining / step.duration;
   const phaseNum = step.phase === "hold" ? 1 : 2;
+  const phaseTitle = step.phase === "hold" ? t("workout.contract") : t("workout.push");
 
   return (
     <AppShell hideNav>
@@ -120,22 +132,22 @@ function Workout() {
           <button
             onClick={() => navigate({ to: "/" })}
             className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/60 text-muted-foreground"
-            aria-label="Exit workout"
+            aria-label={t("workout.exit")}
           >
             <X size={18} />
           </button>
           <div className="text-center">
             <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              Phase {phaseNum} of 2
+              {t("workout.phaseOf", { n: phaseNum })}
             </div>
             <div className="mt-0.5 font-display text-sm font-bold">
-              {step.phase === "hold" ? "Contract" : "Push"} · Rep {step.rep}/{REPS_PER_PHASE}
+              {phaseTitle} · {t("workout.rep", { a: step.rep, b: REPS_PER_PHASE })}
             </div>
           </div>
           <button
             onClick={() => setRunning((r) => !r)}
             className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/60 text-foreground"
-            aria-label={running ? "Pause" : "Resume"}
+            aria-label={running ? t("workout.pause") : t("workout.resume")}
           >
             {running ? <Pause size={18} /> : <Play size={18} />}
           </button>
@@ -155,16 +167,10 @@ function Workout() {
             progress={stepProgress}
             secondsLeft={remaining}
             label={label}
-            sublabel={step.mode === "work" ? (step.phase === "hold" ? "Contract" : "Push down") : "Release"}
+            sublabel={sublabel}
             accent={step.mode === "work" ? "primary" : "muted"}
           />
-          <div className="text-center text-sm text-muted-foreground">
-            {step.mode === "work"
-              ? step.phase === "hold"
-                ? "Squeeze and hold your pelvic floor muscles."
-                : "Gently push your pelvic floor muscles downward."
-              : "Fully relax. Breathe."}
-          </div>
+          <div className="text-center text-sm text-muted-foreground">{instr}</div>
         </div>
       </div>
     </AppShell>
@@ -172,6 +178,7 @@ function Workout() {
 }
 
 function CompletionScreen({ onExit }: { onExit: () => void }) {
+  const { t } = useI18n();
   return (
     <AppShell hideNav>
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
@@ -181,18 +188,16 @@ function CompletionScreen({ onExit }: { onExit: () => void }) {
             <span className="font-display text-4xl">✓</span>
           </div>
         </div>
-        <h1 className="font-display text-3xl font-bold">Workout Complete</h1>
-        <p className="max-w-xs text-muted-foreground">
-          Congratulations. Your discipline compounds — every session strengthens your foundation.
-        </p>
+        <h1 className="font-display text-3xl font-bold">{t("workout.complete")}</h1>
+        <p className="max-w-xs text-muted-foreground">{t("workout.congrats")}</p>
         <div className="rounded-full border border-primary/40 bg-primary/10 px-5 py-2 text-sm font-semibold uppercase tracking-widest text-primary">
-          +1 Daily Workout
+          {t("workout.plusOne")}
         </div>
         <button
           onClick={onExit}
           className="mt-4 w-full max-w-xs rounded-2xl bg-primary py-4 font-display text-base font-bold uppercase tracking-widest text-primary-foreground active:scale-[0.98]"
         >
-          Done
+          {t("workout.done")}
         </button>
       </div>
     </AppShell>
