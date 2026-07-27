@@ -10,14 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkoutRouteImport } from './routes/workout'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WorkoutRoute = WorkoutRouteImport.update({
   id: '/workout',
   path: '/workout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -30,9 +38,19 @@ const ProgressRoute = ProgressRouteImport.update({
   path: '/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,39 +61,76 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/workout': typeof WorkoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/workout': typeof WorkoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/progress': typeof ProgressRoute
   '/settings': typeof SettingsRoute
+  '/terms': typeof TermsRoute
   '/workout': typeof WorkoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/learn' | '/progress' | '/settings' | '/workout'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/learn'
+    | '/privacy'
+    | '/progress'
+    | '/settings'
+    | '/terms'
+    | '/workout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/learn' | '/progress' | '/settings' | '/workout'
-  id: '__root__' | '/' | '/learn' | '/progress' | '/settings' | '/workout'
+  to:
+    | '/'
+    | '/about'
+    | '/learn'
+    | '/privacy'
+    | '/progress'
+    | '/settings'
+    | '/terms'
+    | '/workout'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/learn'
+    | '/privacy'
+    | '/progress'
+    | '/settings'
+    | '/terms'
+    | '/workout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   LearnRoute: typeof LearnRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProgressRoute: typeof ProgressRoute
   SettingsRoute: typeof SettingsRoute
+  TermsRoute: typeof TermsRoute
   WorkoutRoute: typeof WorkoutRoute
 }
 
@@ -86,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/workout'
       fullPath: '/workout'
       preLoaderRoute: typeof WorkoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -102,11 +164,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn': {
       id: '/learn'
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -121,9 +197,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   LearnRoute: LearnRoute,
+  PrivacyRoute: PrivacyRoute,
   ProgressRoute: ProgressRoute,
   SettingsRoute: SettingsRoute,
+  TermsRoute: TermsRoute,
   WorkoutRoute: WorkoutRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Play, Flame, Trophy, Calendar } from "lucide-react";
+import { Play, Flame, Trophy, Calendar, Settings } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
 import { getLevel, TOTAL_LEVELS, WORKOUTS_PER_LEVEL, REPS_PER_PHASE } from "../lib/program";
