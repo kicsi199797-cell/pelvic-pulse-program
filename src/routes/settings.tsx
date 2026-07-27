@@ -43,7 +43,7 @@ function SettingsPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-6 px-6 pb-12 pt-12">
+      <div className="flex flex-col gap-6 px-6 pb-28 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             Preferences
