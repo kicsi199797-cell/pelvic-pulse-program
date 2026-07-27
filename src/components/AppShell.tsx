@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, BarChart3 } from "lucide-react";
+import { Home, BarChart3, BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function AppShell({ children, hideNav = false }: { children: ReactNode; hideNav?: boolean }) {
@@ -10,9 +10,10 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
       <main className="relative flex-1 pb-24">{children}</main>
       {!hideNav && (
         <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl">
-          <div className="grid grid-cols-2 py-3">
+          <div className="grid grid-cols-3 py-3">
             <NavItem to="/" active={pathname === "/"} icon={<Home size={20} />} label="Train" />
             <NavItem to="/progress" active={pathname === "/progress"} icon={<BarChart3 size={20} />} label="Progress" />
+            <NavItem to="/learn" active={pathname === "/learn"} icon={<BookOpen size={20} />} label="Learn" />
           </div>
         </nav>
       )}
