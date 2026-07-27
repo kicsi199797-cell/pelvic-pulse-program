@@ -84,20 +84,17 @@ function Workout() {
   useEffect(() => {
     if (!running || done) return;
     const id = setInterval(() => {
-      setRemaining((r) => {
-        if (r > 1) return r - 1;
-        // advance
-        if (stepIdx < steps.length - 1) {
-          setStepIdx((i) => i + 1);
-          return steps[stepIdx + 1].duration;
-        } else {
-          setDone(true);
-          return 0;
-        }
-      });
+      if (remaining > 1) {
+        setRemaining(remaining - 1);
+      } else if (stepIdx < steps.length - 1) {
+        setStepIdx(stepIdx + 1);
+      } else {
+        setDone(true);
+      }
     }, 1000);
     return () => clearInterval(id);
-  }, [running, done, stepIdx, steps]);
+  }, [running, done, stepIdx, steps, remaining]);
+
 
   useEffect(() => {
     if (done && !completedRef.current) {
