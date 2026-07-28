@@ -198,7 +198,7 @@ function Workout() {
             secondsLeft={remaining}
             label={label}
             sublabel={sublabel}
-            accent={step.mode === "work" ? "primary" : "muted"}
+            accent={step.mode === "work" ? EX_ACCENT[step.exercise] : "muted"}
           />
           <div className="text-center text-sm text-muted-foreground">{instr}</div>
         </div>
