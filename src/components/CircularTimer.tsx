@@ -57,9 +57,10 @@ export function CircularTimer({ progress, secondsLeft, label, sublabel, accent =
         <div className="mt-2 font-display text-7xl font-bold tabular-nums text-foreground">
           {secondsLeft}
         </div>
-        <div className="mt-1 text-sm font-medium uppercase tracking-widest text-primary">
+        <div className="mt-1 text-sm font-medium uppercase tracking-widest" style={{ color }}>
           {label}
         </div>
+
       </div>
     </div>
   );
