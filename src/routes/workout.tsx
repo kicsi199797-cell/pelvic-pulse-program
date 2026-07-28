@@ -120,20 +120,40 @@ function Workout() {
 
   if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} />;
 
-  const label = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.hold") : t("workout.pushU"))
-    : t("workout.relax");
-  const sublabel = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.contract") : t("workout.pushDown"))
-    : t("workout.release");
-  const instr = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.contractInstr") : t("workout.pushInstr"))
-    : t("workout.relaxInstr");
+  const EX_LABEL: Record<Exercise, string> = {
+    hold: t("workout.hold"),
+    pulses: t("workout.quickPulses"),
+    push: t("workout.pushU"),
+    pushPulses: t("workout.quickPushes"),
+  };
+  const EX_SUBLABEL: Record<Exercise, string> = {
+    hold: t("workout.contract"),
+    pulses: t("workout.contract"),
+    push: t("workout.pushDown"),
+    pushPulses: t("workout.pushDown"),
+  };
+  const EX_INSTR: Record<Exercise, string> = {
+    hold: t("workout.contractInstr"),
+    pulses: t("workout.pulsesInstr"),
+    push: t("workout.pushInstr"),
+    pushPulses: t("workout.pushPulsesInstr"),
+  };
+  const EX_ACCENT: Record<Exercise, "primary" | "success" | "warning"> = {
+    hold: "primary",
+    pulses: "success",
+    push: "warning",
+    pushPulses: "warning",
+  };
+
+  const label = step.mode === "work" ? EX_LABEL[step.exercise] : t("workout.relax");
+  const sublabel = step.mode === "work" ? EX_SUBLABEL[step.exercise] : t("workout.release");
+  const instr = step.mode === "work" ? EX_INSTR[step.exercise] : t("workout.relaxInstr");
   const totalSteps = steps.length;
   const workoutProgress = (stepIdx + (1 - remaining / step.duration)) / totalSteps;
   const stepProgress = 1 - remaining / step.duration;
-  const phaseNum = step.phase === "hold" ? 1 : 2;
-  const phaseTitle = step.phase === "hold" ? t("workout.contract") : t("workout.push");
+  const phaseNum = step.phase;
+  const phaseTitle = EX_LABEL[step.exercise];
+
 
   return (
     <AppShell hideNav>
