@@ -75,9 +75,10 @@ function Workout() {
   const { t } = useI18n();
   const level = useMemo(() => getLevel(progress.currentLevel), [progress.currentLevel]);
   const steps = useMemo(
-    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest),
+    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest, level.level >= 5),
     [level],
   );
+
 
   const [stepIdx, setStepIdx] = useState(0);
   const [remaining, setRemaining] = useState(steps[0].duration);
