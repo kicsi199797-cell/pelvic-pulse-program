@@ -20,22 +20,31 @@ export const Route = createFileRoute("/workout")({
   component: Workout,
 });
 
-type Phase = "hold" | "push";
+type Exercise = "hold" | "pulses" | "push" | "pushPulses";
 type Mode = "work" | "rest";
-type Step = { phase: Phase; mode: Mode; duration: number; rep: number };
+type Step = { exercise: Exercise; phase: 1 | 2; mode: Mode; duration: number; rep: number };
 
-function buildSteps(holdWork: number, holdRest: number, pushWork: number, pushRest: number): Step[] {
+function buildSteps(
+  holdWork: number,
+  holdRest: number,
+  pushWork: number,
+  pushRest: number,
+  includePulses: boolean,
+): Step[] {
   const steps: Step[] = [];
-  for (let i = 1; i <= REPS_PER_PHASE; i++) {
-    steps.push({ phase: "hold", mode: "work", duration: holdWork, rep: i });
-    steps.push({ phase: "hold", mode: "rest", duration: holdRest, rep: i });
-  }
-  for (let i = 1; i <= REPS_PER_PHASE; i++) {
-    steps.push({ phase: "push", mode: "work", duration: pushWork, rep: i });
-    steps.push({ phase: "push", mode: "rest", duration: pushRest, rep: i });
-  }
+  const add = (exercise: Exercise, phase: 1 | 2, work: number, rest: number) => {
+    for (let i = 1; i <= REPS_PER_PHASE; i++) {
+      steps.push({ exercise, phase, mode: "work", duration: work, rep: i });
+      steps.push({ exercise, phase, mode: "rest", duration: rest, rep: i });
+    }
+  };
+  add("hold", 1, holdWork, holdRest);
+  if (includePulses) add("pulses", 1, holdWork, holdRest);
+  add("push", 2, pushWork, pushRest);
+  if (includePulses) add("pushPulses", 2, pushWork, pushRest);
   return steps;
 }
+
 
 function beep(freq = 660, duration = 160) {
   try {
@@ -66,9 +75,10 @@ function Workout() {
   const { t } = useI18n();
   const level = useMemo(() => getLevel(progress.currentLevel), [progress.currentLevel]);
   const steps = useMemo(
-    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest),
+    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest, level.level >= 5),
     [level],
   );
+
 
   const [stepIdx, setStepIdx] = useState(0);
   const [remaining, setRemaining] = useState(steps[0].duration);
@@ -110,20 +120,40 @@ function Workout() {
 
   if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} />;
 
-  const label = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.hold") : t("workout.pushU"))
-    : t("workout.relax");
-  const sublabel = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.contract") : t("workout.pushDown"))
-    : t("workout.release");
-  const instr = step.mode === "work"
-    ? (step.phase === "hold" ? t("workout.contractInstr") : t("workout.pushInstr"))
-    : t("workout.relaxInstr");
+  const EX_LABEL: Record<Exercise, string> = {
+    hold: t("workout.hold"),
+    pulses: t("workout.quickPulses"),
+    push: t("workout.pushU"),
+    pushPulses: t("workout.quickPushes"),
+  };
+  const EX_SUBLABEL: Record<Exercise, string> = {
+    hold: t("workout.contract"),
+    pulses: t("workout.contract"),
+    push: t("workout.pushDown"),
+    pushPulses: t("workout.pushDown"),
+  };
+  const EX_INSTR: Record<Exercise, string> = {
+    hold: t("workout.contractInstr"),
+    pulses: t("workout.pulsesInstr"),
+    push: t("workout.pushInstr"),
+    pushPulses: t("workout.pushPulsesInstr"),
+  };
+  const EX_ACCENT: Record<Exercise, "primary" | "success" | "warning"> = {
+    hold: "primary",
+    pulses: "success",
+    push: "warning",
+    pushPulses: "warning",
+  };
+
+  const label = step.mode === "work" ? EX_LABEL[step.exercise] : t("workout.relax");
+  const sublabel = step.mode === "work" ? EX_SUBLABEL[step.exercise] : t("workout.release");
+  const instr = step.mode === "work" ? EX_INSTR[step.exercise] : t("workout.relaxInstr");
   const totalSteps = steps.length;
   const workoutProgress = (stepIdx + (1 - remaining / step.duration)) / totalSteps;
   const stepProgress = 1 - remaining / step.duration;
-  const phaseNum = step.phase === "hold" ? 1 : 2;
-  const phaseTitle = step.phase === "hold" ? t("workout.contract") : t("workout.push");
+  const phaseNum = step.phase;
+  const phaseTitle = EX_LABEL[step.exercise];
+
 
   return (
     <AppShell hideNav>
@@ -168,7 +198,7 @@ function Workout() {
             secondsLeft={remaining}
             label={label}
             sublabel={sublabel}
-            accent={step.mode === "work" ? "primary" : "muted"}
+            accent={step.mode === "work" ? EX_ACCENT[step.exercise] : "muted"}
           />
           <div className="text-center text-sm text-muted-foreground">{instr}</div>
         </div>
