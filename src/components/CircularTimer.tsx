@@ -3,7 +3,14 @@ type Props = {
   secondsLeft: number;
   label: string;
   sublabel?: string;
-  accent?: "primary" | "muted";
+  accent?: "primary" | "muted" | "success" | "warning";
+};
+
+const ACCENT_COLORS: Record<NonNullable<Props["accent"]>, string> = {
+  primary: "var(--primary)",
+  muted: "var(--muted-foreground)",
+  success: "oklch(0.75 0.17 155)",
+  warning: "oklch(0.75 0.16 55)",
 };
 
 export function CircularTimer({ progress, secondsLeft, label, sublabel, accent = "primary" }: Props) {
@@ -12,7 +19,8 @@ export function CircularTimer({ progress, secondsLeft, label, sublabel, accent =
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const offset = c * (1 - Math.max(0, Math.min(1, progress)));
-  const color = accent === "primary" ? "var(--primary)" : "var(--muted-foreground)";
+  const color = ACCENT_COLORS[accent];
+
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
