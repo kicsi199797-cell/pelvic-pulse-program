@@ -121,6 +121,12 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { settings, update } = useSettings();
 
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
+
+
+
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider
