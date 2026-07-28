@@ -20,22 +20,31 @@ export const Route = createFileRoute("/workout")({
   component: Workout,
 });
 
-type Phase = "hold" | "push";
+type Exercise = "hold" | "pulses" | "push" | "pushPulses";
 type Mode = "work" | "rest";
-type Step = { phase: Phase; mode: Mode; duration: number; rep: number };
+type Step = { exercise: Exercise; phase: 1 | 2; mode: Mode; duration: number; rep: number };
 
-function buildSteps(holdWork: number, holdRest: number, pushWork: number, pushRest: number): Step[] {
+function buildSteps(
+  holdWork: number,
+  holdRest: number,
+  pushWork: number,
+  pushRest: number,
+  includePulses: boolean,
+): Step[] {
   const steps: Step[] = [];
-  for (let i = 1; i <= REPS_PER_PHASE; i++) {
-    steps.push({ phase: "hold", mode: "work", duration: holdWork, rep: i });
-    steps.push({ phase: "hold", mode: "rest", duration: holdRest, rep: i });
-  }
-  for (let i = 1; i <= REPS_PER_PHASE; i++) {
-    steps.push({ phase: "push", mode: "work", duration: pushWork, rep: i });
-    steps.push({ phase: "push", mode: "rest", duration: pushRest, rep: i });
-  }
+  const add = (exercise: Exercise, phase: 1 | 2, work: number, rest: number) => {
+    for (let i = 1; i <= REPS_PER_PHASE; i++) {
+      steps.push({ exercise, phase, mode: "work", duration: work, rep: i });
+      steps.push({ exercise, phase, mode: "rest", duration: rest, rep: i });
+    }
+  };
+  add("hold", 1, holdWork, holdRest);
+  if (includePulses) add("pulses", 1, holdWork, holdRest);
+  add("push", 2, pushWork, pushRest);
+  if (includePulses) add("pushPulses", 2, pushWork, pushRest);
   return steps;
 }
+
 
 function beep(freq = 660, duration = 160) {
   try {
