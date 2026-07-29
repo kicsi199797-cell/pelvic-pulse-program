@@ -24,6 +24,9 @@ const da: Dict = {
     total: "I alt",
     dayLabel: "Dag",
     settings: "Indstillinger",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Fase {n} af 2",
@@ -49,6 +52,11 @@ const da: Dict = {
     congrats: "Tillykke. Din disciplin tæller — hver session styrker fundamentet.",
     plusOne: "+1 daglig træning",
     done: "Færdig",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Din rejse",
@@ -66,6 +74,10 @@ const da: Dict = {
     holdRest: "Hold {h}s · Pause {r}s",
     resetConfirm: "Nulstil alle fremskridt?",
     reset: "Nulstil fremskridt",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Sådan virker det",

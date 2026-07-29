@@ -24,6 +24,9 @@ const it: Dict = {
     total: "Totale",
     dayLabel: "Giorno",
     settings: "Impostazioni",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Fase {n} di 2",
@@ -49,6 +52,11 @@ const it: Dict = {
     congrats: "Complimenti. La tua disciplina si somma — ogni sessione rafforza le tue basi.",
     plusOne: "+1 allenamento giornaliero",
     done: "Fatto",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Il tuo percorso",
@@ -66,6 +74,10 @@ const it: Dict = {
     holdRest: "Tieni {h}s · Riposo {r}s",
     resetConfirm: "Azzerare tutti i progressi?",
     reset: "Azzera progressi",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Come funziona",

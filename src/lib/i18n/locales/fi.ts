@@ -24,6 +24,9 @@ const fi: Dict = {
     total: "Yhteensä",
     dayLabel: "Päivä",
     settings: "Asetukset",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Vaihe {n} / 2",
@@ -49,6 +52,11 @@ const fi: Dict = {
     congrats: "Onnittelut. Kurinalaisuutesi kasvaa — jokainen kerta vahvistaa perustaa.",
     plusOne: "+1 päivittäinen harjoitus",
     done: "Valmis",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Matkasi",
@@ -66,6 +74,10 @@ const fi: Dict = {
     holdRest: "Pidä {h}s · Lepää {r}s",
     resetConfirm: "Nollataanko kaikki edistyminen?",
     reset: "Nollaa edistyminen",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Näin se toimii",

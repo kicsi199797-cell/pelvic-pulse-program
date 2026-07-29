@@ -24,6 +24,9 @@ const hu: Dict = {
     total: "Összesen",
     dayLabel: "Nap",
     settings: "Beállítások",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "{n}. szakasz / 2",
@@ -49,6 +52,11 @@ const hu: Dict = {
     congrats: "Gratulálunk! A kitartásod számít — minden edzés erősíti az alapokat.",
     plusOne: "+1 napi edzés",
     done: "Kész",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Az utad",
@@ -66,6 +74,10 @@ const hu: Dict = {
     holdRest: "Tartás {h} mp · Pihenés {r} mp",
     resetConfirm: "Minden haladás törlése?",
     reset: "Haladás törlése",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Hogyan működik",
