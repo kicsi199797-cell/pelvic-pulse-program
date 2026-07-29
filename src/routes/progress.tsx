@@ -88,8 +88,9 @@ function ProgressPage() {
                     <div>
                       <div className="font-display text-base font-bold">{t("progress.levelN", { n: l.level })}</div>
                       <div className="text-xs text-muted-foreground">
-                        {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })}
+                        {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })} · {t("progress.required", { n: requiredWorkouts(l.level) })}
                       </div>
+
                     </div>
                   </div>
                   {current && (
