@@ -24,6 +24,9 @@ const sk: Dict = {
     total: "Spolu",
     dayLabel: "Deň",
     settings: "Nastavenia",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Fáza {n} z 2",
@@ -49,6 +52,11 @@ const sk: Dict = {
     congrats: "Gratulujeme. Tvoja disciplína sa spočítava — každé cvičenie posilňuje základ.",
     plusOne: "+1 denný tréning",
     done: "Hotovo",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Tvoja cesta",
@@ -66,6 +74,10 @@ const sk: Dict = {
     holdRest: "Držať {h}s · Oddych {r}s",
     resetConfirm: "Resetovať celý postup?",
     reset: "Resetovať postup",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Ako to funguje",

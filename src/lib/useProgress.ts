@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TOTAL_LEVELS, WORKOUTS_PER_LEVEL } from "./program";
+import { TOTAL_LEVELS, requiredWorkouts } from "./program";
 
 const KEY = "stamina-trainer-progress-v1";
 
@@ -11,6 +11,12 @@ export type Progress = {
   streak: number;
   longestStreak: number;
   lastWorkoutDate: string | null; // YYYY-MM-DD
+  lastCompletion: {
+    completedInLevel: number; // workouts done in the level after this session
+    requiredInLevel: number; // required workouts for that level
+    leveledUp: boolean;
+    newLevel: number; // level after this completion (post level-up)
+  } | null;
 };
 
 const initial: Progress = {
@@ -21,6 +27,7 @@ const initial: Progress = {
   streak: 0,
   longestStreak: 0,
   lastWorkoutDate: null,
+  lastCompletion: null,
 };
 
 function load(): Progress {
@@ -74,9 +81,14 @@ export function useProgress() {
       const workoutsInLevel = prev.workoutsInLevel + 1;
       let currentLevel = prev.currentLevel;
       let remaining = workoutsInLevel;
-      if (workoutsInLevel >= WORKOUTS_PER_LEVEL && currentLevel < TOTAL_LEVELS) {
+      let leveledUp = false;
+      const requiredForCurrent = requiredWorkouts(currentLevel);
+      let completedInLevel = workoutsInLevel;
+      let requiredInLevel = requiredForCurrent;
+      if (workoutsInLevel >= requiredForCurrent && currentLevel < TOTAL_LEVELS) {
         currentLevel += 1;
         remaining = 0;
+        leveledUp = true;
       }
       const next: Progress = {
         totalWorkouts: prev.totalWorkouts + 1,
@@ -86,6 +98,12 @@ export function useProgress() {
         streak,
         longestStreak: Math.max(prev.longestStreak, streak),
         lastWorkoutDate: today,
+        lastCompletion: {
+          completedInLevel,
+          requiredInLevel,
+          leveledUp,
+          newLevel: currentLevel,
+        },
       };
       save(next);
       return next;

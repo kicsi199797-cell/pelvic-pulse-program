@@ -24,6 +24,9 @@ const ro: Dict = {
     total: "Total",
     dayLabel: "Ziua",
     settings: "Setări",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Faza {n} din 2",
@@ -49,6 +52,11 @@ const ro: Dict = {
     congrats: "Felicitări. Disciplina ta se acumulează — fiecare sesiune îți întărește fundația.",
     plusOne: "+1 antrenament zilnic",
     done: "Gata",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Călătoria ta",
@@ -66,6 +74,10 @@ const ro: Dict = {
     holdRest: "Menținere {h}s · Pauză {r}s",
     resetConfirm: "Resetezi tot progresul?",
     reset: "Resetează progresul",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Cum funcționează",

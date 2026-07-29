@@ -119,7 +119,7 @@ function Workout() {
     }
   }, [done, completeWorkout, settings.vibration, settings.soundEffects]);
 
-  if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} />;
+  if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} completion={progress.lastCompletion} />;
 
   const EX_LABEL: Record<Exercise, string> = {
     hold: t("workout.hold"),
@@ -208,8 +208,25 @@ function Workout() {
   );
 }
 
-function CompletionScreen({ onExit }: { onExit: () => void }) {
-  const { t } = useI18n();
+function CompletionScreen({
+  onExit,
+  completion,
+}: {
+  onExit: () => void;
+  completion: { completedInLevel: number; requiredInLevel: number; leveledUp: boolean; newLevel: number } | null;
+}) {
+  const { t, formatNumber } = useI18n();
+  const c = completion;
+  const message = !c
+    ? t("workout.keepGoing")
+    : c.leveledUp
+      ? t("workout.levelUnlocked", { n: formatNumber(c.newLevel) })
+      : c.completedInLevel === c.requiredInLevel - 1
+        ? t("workout.oneMoreToUnlock", { n: formatNumber(c.newLevel + 1) })
+        : t("workout.youCompletedX", {
+            done: formatNumber(c.completedInLevel),
+            required: formatNumber(c.requiredInLevel),
+          });
   return (
     <AppShell hideNav>
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
@@ -219,14 +236,30 @@ function CompletionScreen({ onExit }: { onExit: () => void }) {
             <span className="font-display text-4xl">✓</span>
           </div>
         </div>
-        <h1 className="font-display text-3xl font-bold">{t("workout.complete")}</h1>
-        <p className="max-w-xs text-muted-foreground">{t("workout.congrats")}</p>
+        <h1 className="font-display text-3xl font-bold">{t("workout.greatJob")}</h1>
+        <p className="max-w-xs text-muted-foreground">{message}</p>
+        {c && (
+          <div className="w-full max-w-xs">
+            <div className="h-2 overflow-hidden rounded-full bg-secondary">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all"
+                style={{ width: `${(c.leveledUp ? 1 : c.completedInLevel / c.requiredInLevel) * 100}%` }}
+              />
+            </div>
+            <div className="mt-2 text-xs text-muted-foreground">
+              {t("home.workoutsLevel", {
+                done: formatNumber(c.leveledUp ? c.requiredInLevel : c.completedInLevel),
+                required: formatNumber(c.requiredInLevel),
+              })}
+            </div>
+          </div>
+        )}
         <div className="rounded-full border border-primary/40 bg-primary/10 px-5 py-2 text-sm font-semibold uppercase tracking-widest text-primary">
           {t("workout.plusOne")}
         </div>
         <button
           onClick={onExit}
-          className="mt-4 w-full max-w-xs rounded-2xl bg-primary py-4 font-display text-base font-bold uppercase tracking-widest text-primary-foreground active:scale-[0.98]"
+          className="mt-2 w-full max-w-xs rounded-2xl bg-primary py-4 font-display text-base font-bold uppercase tracking-widest text-primary-foreground active:scale-[0.98]"
         >
           {t("workout.done")}
         </button>
@@ -234,3 +267,4 @@ function CompletionScreen({ onExit }: { onExit: () => void }) {
     </AppShell>
   );
 }
+

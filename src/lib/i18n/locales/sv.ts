@@ -24,6 +24,9 @@ const sv: Dict = {
     total: "Totalt",
     dayLabel: "Dag",
     settings: "Inställningar",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Fas {n} av 2",
@@ -49,6 +52,11 @@ const sv: Dict = {
     congrats: "Grattis. Din disciplin räknas — varje pass stärker grunden.",
     plusOne: "+1 dagligt pass",
     done: "Klart",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Din resa",
@@ -66,6 +74,10 @@ const sv: Dict = {
     holdRest: "Håll {h}s · Vila {r}s",
     resetConfirm: "Nollställa alla framsteg?",
     reset: "Nollställ framsteg",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Så fungerar det",

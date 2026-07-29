@@ -24,6 +24,9 @@ const nl: Dict = {
     total: "Totaal",
     dayLabel: "Dag",
     settings: "Instellingen",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
   workout: {
     phaseOf: "Fase {n} van 2",
@@ -49,6 +52,11 @@ const nl: Dict = {
     congrats: "Gefeliciteerd. Je discipline telt op — elke sessie versterkt je fundament.",
     plusOne: "+1 dagelijkse training",
     done: "Klaar",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Jouw reis",
@@ -66,6 +74,10 @@ const nl: Dict = {
     holdRest: "Houden {h}s · Rust {r}s",
     resetConfirm: "Alle voortgang resetten?",
     reset: "Voortgang resetten",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
   learn: {
     kicker: "Hoe het werkt",

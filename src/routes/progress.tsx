@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Lock } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
-import { allLevels, TOTAL_LEVELS, WORKOUTS_PER_LEVEL } from "../lib/program";
+import { allLevels, TOTAL_LEVELS, requiredWorkouts, totalRequiredWorkouts, completedWorkoutsBeforeLevel } from "../lib/program";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/progress")({
@@ -22,9 +22,11 @@ function ProgressPage() {
   const { t, formatNumber } = useI18n();
   const levels = allLevels();
   const completedLevels = progress.currentLevel - 1;
-  const completionPct = Math.round(
-    (((progress.currentLevel - 1) + progress.workoutsInLevel / WORKOUTS_PER_LEVEL) / TOTAL_LEVELS) * 100,
-  );
+  const totalRequired = totalRequiredWorkouts();
+  const done = completedWorkoutsBeforeLevel(progress.currentLevel) + progress.workoutsInLevel;
+  const completionPct = Math.round((done / totalRequired) * 100);
+  const daysRemaining = Math.max(0, totalRequired - progress.totalWorkouts);
+  const requiredThisLevel = requiredWorkouts(progress.currentLevel);
 
   return (
     <AppShell>
@@ -39,11 +41,17 @@ function ProgressPage() {
         <div className="grid grid-cols-2 gap-3">
           <Metric label={t("progress.completedLevels")} value={`${formatNumber(completedLevels)}/${TOTAL_LEVELS}`} />
           <Metric label={t("progress.currentLevel")} value={formatNumber(progress.currentLevel)} />
-          <Metric label={t("progress.daysCompleted")} value={formatNumber(progress.currentDay - 1)} />
+          <Metric
+            label={t("progress.workoutsThisLevel")}
+            value={`${formatNumber(progress.workoutsInLevel)}/${formatNumber(requiredThisLevel)}`}
+          />
+          <Metric label={t("progress.totalWorkouts")} value={formatNumber(progress.totalWorkouts)} />
+          <Metric label={t("progress.daysRemaining")} value={formatNumber(daysRemaining)} />
           <Metric label={t("progress.completion")} value={`${formatNumber(completionPct)}%`} />
           <Metric label={t("progress.streak")} value={t("progress.daysShort", { n: formatNumber(progress.streak) })} />
           <Metric label={t("progress.longestStreak")} value={t("progress.daysShort", { n: formatNumber(progress.longestStreak) })} />
         </div>
+
 
         <section>
           <div className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
@@ -80,8 +88,9 @@ function ProgressPage() {
                     <div>
                       <div className="font-display text-base font-bold">{t("progress.levelN", { n: l.level })}</div>
                       <div className="text-xs text-muted-foreground">
-                        {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })}
+                        {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })} · {t("progress.required", { n: requiredWorkouts(l.level) })}
                       </div>
+
                     </div>
                   </div>
                   {current && (

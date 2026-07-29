@@ -22,7 +22,11 @@ const enConst = {
     total: "Total",
     dayLabel: "Day",
     settings: "Settings",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
+
   workout: {
     phaseOf: "Phase {n} of 2",
     contract: "Contract",
@@ -47,6 +51,11 @@ const enConst = {
     congrats: "Congratulations. Your discipline compounds — every session strengthens your foundation.",
     plusOne: "+1 Daily Workout",
     done: "Done",
+    greatJob: "Great job!",
+    youCompletedX: "You completed {done} of {required} workouts required for this level.",
+    oneMoreToUnlock: "One more workout to unlock Level {n}!",
+    levelUnlocked: "Level {n} unlocked!",
+    keepGoing: "Keep going — every session builds your foundation.",
   },
   progress: {
     kicker: "Your Journey",
@@ -64,7 +73,12 @@ const enConst = {
     holdRest: "Hold {h}s · Rest {r}s",
     resetConfirm: "Reset all progress?",
     reset: "Reset progress",
+    workoutsThisLevel: "Workouts This Level",
+    daysRemaining: "Days Remaining",
+    totalWorkouts: "Total Workouts",
+    required: "{n} required",
   },
+
   learn: {
     kicker: "How It Works",
     title: "Master the Movement",
