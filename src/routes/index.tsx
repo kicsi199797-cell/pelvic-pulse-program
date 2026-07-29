@@ -111,7 +111,7 @@ function Home() {
         <section className="grid grid-cols-3 gap-3">
           <Stat icon={<Flame size={18} />} label={t("home.streak")} value={progress.streak} />
           <Stat icon={<Trophy size={18} />} label={t("home.total")} value={progress.totalWorkouts} />
-          <Stat icon={<Calendar size={18} />} label={t("home.daysLeft", { n: "" }).replace("~", "").trim() || t("home.dayLabel")} value={daysLeft} />
+          <Stat icon={<Calendar size={18} />} label={t("progress.daysRemaining")} value={daysLeft} />
         </section>
       </div>
     </AppShell>
