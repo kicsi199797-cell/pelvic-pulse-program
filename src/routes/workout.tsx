@@ -119,7 +119,7 @@ function Workout() {
     }
   }, [done, completeWorkout, settings.vibration, settings.soundEffects]);
 
-  if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} />;
+  if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} completion={progress.lastCompletion} />;
 
   const EX_LABEL: Record<Exercise, string> = {
     hold: t("workout.hold"),
