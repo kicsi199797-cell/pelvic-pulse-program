@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Lock } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
-import { allLevels, TOTAL_LEVELS, WORKOUTS_PER_LEVEL } from "../lib/program";
+import { allLevels, TOTAL_LEVELS, requiredWorkouts, totalRequiredWorkouts, completedWorkoutsBeforeLevel } from "../lib/program";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/progress")({
