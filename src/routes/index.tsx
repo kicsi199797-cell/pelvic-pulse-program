@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Stamina Trainer — Daily Pelvic Floor Workout" },
       { name: "description", content: "Start today's Kegel workout. Track your streak and progress through 20 levels." },
-      { property: "og:title", content: "Stamina Trainer" },
+      { property: "og:title", content: "Stamina Trainer — Daily Pelvic Floor Workout" },
       { property: "og:description", content: "Start today's Kegel workout. Track your streak and progress through 20 levels." },
     ],
   }),
