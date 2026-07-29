@@ -22,7 +22,11 @@ const enConst = {
     total: "Total",
     dayLabel: "Day",
     settings: "Settings",
+    workoutsLevel: "{done} / {required} workouts",
+    levelOf: "Level {n} of {total}",
+    daysLeft: "~{n} days left",
   },
+
   workout: {
     phaseOf: "Phase {n} of 2",
     contract: "Contract",
