@@ -4,7 +4,7 @@ import { Pause, Play, X } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { CircularTimer } from "../components/CircularTimer";
 import { useProgress } from "../lib/useProgress";
-import { getLevel, REPS_PER_PHASE } from "../lib/program";
+import { getLevel } from "../lib/program";
 import { useI18n } from "../lib/i18n";
 import { useSettings } from "../lib/useSettings";
 
@@ -30,10 +30,11 @@ function buildSteps(
   pushWork: number,
   pushRest: number,
   includePulses: boolean,
+  rounds: number,
 ): Step[] {
   const steps: Step[] = [];
   const add = (exercise: Exercise, phase: 1 | 2, work: number, rest: number) => {
-    for (let i = 1; i <= REPS_PER_PHASE; i++) {
+    for (let i = 1; i <= rounds; i++) {
       steps.push({ exercise, phase, mode: "work", duration: work, rep: i });
       steps.push({ exercise, phase, mode: "rest", duration: rest, rep: i });
     }
@@ -75,7 +76,7 @@ function Workout() {
   const { t } = useI18n();
   const level = useMemo(() => getLevel(progress.currentLevel), [progress.currentLevel]);
   const steps = useMemo(
-    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest, level.level >= 5),
+    () => buildSteps(level.holdWork, level.holdRest, level.pushWork, level.pushRest, level.level >= 5, level.rounds),
     [level],
   );
 
@@ -171,7 +172,7 @@ function Workout() {
               {t("workout.phaseOf", { n: phaseNum })}
             </div>
             <div className="mt-0.5 font-display text-sm font-bold">
-              {phaseTitle} · {t("workout.rep", { a: step.rep, b: REPS_PER_PHASE })}
+              {phaseTitle} · {t("workout.rep", { a: step.rep, b: level.rounds })}
             </div>
           </div>
           <button

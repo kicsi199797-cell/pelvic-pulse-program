@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Play, Flame, Trophy, Calendar, Settings } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
-import { getLevel, TOTAL_LEVELS, WORKOUTS_PER_LEVEL, REPS_PER_PHASE } from "../lib/program";
+import { getLevel, TOTAL_LEVELS, WORKOUTS_PER_LEVEL, totalWorkoutTime } from "../lib/program";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -79,7 +79,10 @@ function Home() {
                   {t("home.holdRest", { n: level.holdRest })}
                 </div>
                 <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">
-                  {t("home.repsPhases", { reps: REPS_PER_PHASE })}
+                  {t("home.repsPhases", { reps: level.rounds })}
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground/80">
+                  ~{Math.round(totalWorkoutTime(level) / 60)} min
                 </div>
               </div>
             </div>
