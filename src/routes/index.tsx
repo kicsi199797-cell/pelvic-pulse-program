@@ -2,7 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Play, Flame, Trophy, Calendar, Settings } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useProgress } from "../lib/useProgress";
-import { getLevel, TOTAL_LEVELS, WORKOUTS_PER_LEVEL, totalWorkoutTime } from "../lib/program";
+import {
+  getLevel,
+  TOTAL_LEVELS,
+  totalWorkoutTime,
+  requiredWorkouts,
+  totalRequiredWorkouts,
+  completedWorkoutsBeforeLevel,
+} from "../lib/program";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -21,7 +28,11 @@ function Home() {
   const { progress, hydrated } = useProgress();
   const { t, formatNumber } = useI18n();
   const level = getLevel(progress.currentLevel);
-  const overall = ((progress.currentLevel - 1) + progress.workoutsInLevel / WORKOUTS_PER_LEVEL) / TOTAL_LEVELS;
+  const required = requiredWorkouts(progress.currentLevel);
+  const totalRequired = totalRequiredWorkouts();
+  const done = completedWorkoutsBeforeLevel(progress.currentLevel) + progress.workoutsInLevel;
+  const overall = done / totalRequired;
+  const daysLeft = Math.max(0, totalRequired - progress.totalWorkouts);
 
   return (
     <AppShell>
@@ -32,7 +43,7 @@ function Home() {
               {t("home.brand")}
             </div>
             <h1 className="mt-1 font-display text-2xl font-bold">
-              {t("home.day", { day: formatNumber(progress.currentDay) })}
+              {t("home.levelOf", { n: formatNumber(progress.currentLevel), total: TOTAL_LEVELS })}
             </h1>
           </div>
           <div className="flex items-center gap-2">
@@ -55,7 +66,7 @@ function Home() {
 
         <section>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>{t("home.progressTo", { n: TOTAL_LEVELS })}</span>
+            <span>{t("home.workoutsLevel", { done: formatNumber(progress.workoutsInLevel), required: formatNumber(required) })}</span>
             <span className="tabular-nums">{formatNumber(Math.round(overall * 100))}%</span>
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-secondary">
@@ -100,12 +111,13 @@ function Home() {
         <section className="grid grid-cols-3 gap-3">
           <Stat icon={<Flame size={18} />} label={t("home.streak")} value={progress.streak} />
           <Stat icon={<Trophy size={18} />} label={t("home.total")} value={progress.totalWorkouts} />
-          <Stat icon={<Calendar size={18} />} label={t("home.dayLabel")} value={progress.currentDay} />
+          <Stat icon={<Calendar size={18} />} label={t("home.daysLeft", { n: "" }).replace("~", "").trim() || t("home.dayLabel")} value={daysLeft} />
         </section>
       </div>
     </AppShell>
   );
 }
+
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   const { formatNumber } = useI18n();
