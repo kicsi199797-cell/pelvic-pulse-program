@@ -1,5 +1,26 @@
 export const TOTAL_LEVELS = 20;
-export const WORKOUTS_PER_LEVEL = 4; // ~4 workouts per level -> ~90 days total(ish)
+export const WORKOUTS_PER_LEVEL = 5; // legacy fallback; use requiredWorkouts(level)
+
+// Workouts required to unlock the next level. Sums to ~94 across 20 levels
+// (~90 days of consistent training).
+export function requiredWorkouts(level: number): number {
+  if (level <= 2) return 3;
+  if (level <= 4) return 4;
+  return 5;
+}
+
+export function totalRequiredWorkouts(): number {
+  let sum = 0;
+  for (let i = 1; i <= TOTAL_LEVELS; i++) sum += requiredWorkouts(i);
+  return sum;
+}
+
+export function completedWorkoutsBeforeLevel(level: number): number {
+  let sum = 0;
+  for (let i = 1; i < level; i++) sum += requiredWorkouts(i);
+  return sum;
+}
+
 
 export type Level = {
   level: number;
