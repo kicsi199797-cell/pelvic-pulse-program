@@ -9,8 +9,8 @@ type Props = {
 const ACCENT_COLORS: Record<NonNullable<Props["accent"]>, string> = {
   primary: "var(--primary)",
   muted: "var(--muted-foreground)",
-  success: "oklch(0.75 0.17 155)",
-  warning: "oklch(0.75 0.16 55)",
+  success: "var(--success)",
+  warning: "var(--warning)",
 };
 
 export function CircularTimer({ progress, secondsLeft, label, sublabel, accent = "primary" }: Props) {

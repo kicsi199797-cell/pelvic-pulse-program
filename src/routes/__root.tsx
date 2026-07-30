@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider, useI18n } from "../lib/i18n";
 import { useSettings } from "../lib/useSettings";
 import { registerServiceWorker } from "../lib/pwa/register";
+import { useTheme } from "../lib/useTheme";
 
 
 function NotFoundComponent() {
@@ -129,6 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { settings, update } = useSettings();
+  useTheme(settings.appearance);
 
   useEffect(() => {
     registerServiceWorker();
