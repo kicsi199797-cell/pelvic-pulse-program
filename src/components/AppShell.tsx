@@ -8,7 +8,7 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
   const { t } = useI18n();
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background text-foreground">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,oklch(0.62_0.2_245/0.18),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80" style={{ background: "var(--halo)" }} />
       <main className="relative flex-1 pb-24">{children}</main>
       {!hideNav && (
         <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl">

@@ -62,7 +62,7 @@ function LearnPage() {
 
         <Link
           to="/"
-          className="mt-4 flex w-full items-center justify-center rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.72_0.16_235/0.7)] transition-transform active:scale-[0.98]"
+          className="mt-4 flex w-full items-center justify-center rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
         >
           {t("learn.start")}
         </Link>

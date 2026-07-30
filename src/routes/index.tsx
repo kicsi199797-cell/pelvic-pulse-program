@@ -77,7 +77,7 @@ function Home() {
           </div>
         </section>
 
-        <section className="relative flex flex-col items-center rounded-3xl border border-border/60 bg-card/60 p-6 shadow-[0_20px_80px_-40px_oklch(0.62_0.2_245/0.6)]">
+        <section className="relative flex flex-col items-center rounded-3xl border border-border/60 bg-card/60 p-6 [box-shadow:var(--shadow-card)]">
           <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
             {t("home.todaysWorkout")}
           </div>
@@ -101,7 +101,7 @@ function Home() {
 
           <Link
             to="/workout"
-            className="group mt-8 flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.72_0.16_235/0.7)] transition-transform active:scale-[0.98]"
+            className="group mt-8 flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
           >
             <Play className="fill-primary-foreground" size={22} />
             {t("home.start")}
