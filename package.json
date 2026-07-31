@@ -11,7 +11,10 @@
     "cap:sync": "bun run build:mobile && cap sync",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "cap:copy": "bun run build:mobile && cap copy",
+    "cap:open:ios": "cap open ios",
+    "cap:open:android": "cap open android"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
