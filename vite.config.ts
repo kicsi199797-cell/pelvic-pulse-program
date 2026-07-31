@@ -7,12 +7,20 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
 
+// Capacitor/native build: `bun run build:mobile` sets CAPACITOR_BUILD=1 so the
+// app is compiled as a static SPA (index.html shell + client assets) instead of
+// the SSR/Nitro worker bundle used for web deploys. Web build is unchanged.
+const isCapacitorBuild = process.env.CAPACITOR_BUILD === "1";
+
 export default defineConfig({
+  nitro: isCapacitorBuild ? false : undefined,
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    ...(isCapacitorBuild ? { spa: { enabled: true }, prerender: { enabled: true } } : {}),
   },
+
   vite: {
     plugins: [
       VitePWA({
