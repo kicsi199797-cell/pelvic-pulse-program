@@ -53,28 +53,63 @@ function save(s: Settings) {
   } catch {}
 }
 
+// ---- Shared module-level store so every component sees the same settings ----
+const serverSnapshot = makeInitial("en");
+let current: Settings = serverSnapshot;
+let initialized = false;
+const listeners = new Set<() => void>();
+
+function emit() {
+  listeners.forEach((l) => l());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getSnapshot(): Settings {
+  return current;
+}
+
+function ensureLoaded() {
+  if (initialized || typeof window === "undefined") return;
+  initialized = true;
+  current = load();
+  emit();
+}
+
+export function setSettings(next: Settings) {
+  current = next;
+  save(next);
+  emit();
+}
+
 export function useSettings() {
-  const [settings, setSettings] = useState<Settings>(() => makeInitial("en"));
-  const [hydrated, setHydrated] = useState(false);
+  const settings = useSyncExternalStore(subscribe, getSnapshot, () => serverSnapshot);
 
   useEffect(() => {
-    setSettings(load());
-    setHydrated(true);
+    ensureLoaded();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === KEY) {
+        current = load();
+        emit();
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   const update = useCallback((patch: Partial<Settings>) => {
-    setSettings((prev) => {
-      const next = { ...prev, ...patch };
-      save(next);
-      return next;
-    });
+    setSettings({ ...current, ...patch });
   }, []);
 
   const reset = useCallback(() => {
-    const fresh = makeInitial(detectBrowserLanguage());
-    save(fresh);
-    setSettings(fresh);
+    setSettings(makeInitial(detectBrowserLanguage()));
   }, []);
 
-  return { settings, hydrated, update, reset };
+  return { settings, hydrated: initialized, update, reset };
 }
+
