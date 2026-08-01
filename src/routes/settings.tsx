@@ -190,19 +190,33 @@ function LinkRow({ icon, label, to }: { icon: React.ReactNode; label: string; to
   );
 }
 
-function Switch({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+function Switch({ checked, onChange, label }: { checked: boolean; onChange: () => void; label?: string }) {
   return (
     <button
-      onClick={onChange}
-      className={`relative h-7 w-12 rounded-full transition-colors ${checked ? "bg-primary" : "bg-muted"}`}
+      type="button"
+      onClick={() => {
+        hapticSelection();
+        onChange();
+      }}
+      className="-my-2 grid h-11 min-w-11 place-items-center px-1"
       aria-checked={checked}
+      aria-label={label}
       role="switch"
     >
       <span
-        className={`absolute top-1 h-5 w-5 rounded-full bg-primary-foreground shadow-sm transition-transform ${
-          checked ? "translate-x-6" : "translate-x-1"
+        className={`relative block h-7 w-12 shrink-0 rounded-full transition-colors duration-200 ease-out ${
+          checked ? "bg-primary" : "bg-muted"
         }`}
-      />
+      >
+        <span
+          className="absolute left-1 top-1 block h-5 w-5 rounded-full bg-primary-foreground shadow-sm transition-transform duration-200 ease-out"
+          style={{
+            transform: `translate3d(${checked ? 20 : 0}px, 0, 0)`,
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+          }}
+        />
+      </span>
     </button>
   );
 }
