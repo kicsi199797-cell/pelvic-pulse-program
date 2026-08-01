@@ -87,6 +87,12 @@ export function setSettings(next: Settings) {
   emit();
 }
 
+/** Read the current settings outside of React (used by non-component helpers such as haptics). */
+export function getSettings(): Settings {
+  ensureLoaded();
+  return current;
+}
+
 export function useSettings() {
   const settings = useSyncExternalStore(subscribe, getSnapshot, () => serverSnapshot);
 

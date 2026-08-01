@@ -11,6 +11,7 @@ import {
   completedWorkoutsBeforeLevel,
 } from "../lib/program";
 import { useI18n } from "../lib/i18n";
+import { hapticImpact } from "../lib/haptics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,7 +37,7 @@ function Home() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-8 px-6 pt-12">
+      <div className="safe-top flex flex-col gap-8 px-6 pt-12">
         <header className="flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
@@ -49,7 +50,8 @@ function Home() {
           <div className="flex items-center gap-2">
             <Link
               to="/settings"
-              className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
+              onClick={() => hapticImpact("light")}
+              className="grid h-11 w-11 place-items-center rounded-full border border-border/60 bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
               aria-label={t("home.settings")}
             >
               <Settings size={20} />
@@ -101,7 +103,8 @@ function Home() {
 
           <Link
             to="/workout"
-            className="group mt-8 flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
+            onClick={() => hapticImpact("medium")}
+            className="group mt-8 min-h-14 flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
           >
             <Play className="fill-primary-foreground" size={22} />
             {t("home.start")}

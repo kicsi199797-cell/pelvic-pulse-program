@@ -30,7 +30,7 @@ function ProgressPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-6 px-6 pt-12">
+      <div className="safe-top flex flex-col gap-6 px-6 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("progress.kicker")}

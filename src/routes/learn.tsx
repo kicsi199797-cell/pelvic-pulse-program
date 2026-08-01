@@ -19,7 +19,7 @@ function LearnPage() {
   const { t } = useI18n();
   return (
     <AppShell>
-      <div className="flex flex-col gap-5 px-6 pb-12 pt-12">
+      <div className="safe-top flex flex-col gap-5 px-6 pb-12 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("learn.kicker")}

@@ -19,7 +19,7 @@ function PrivacyPage() {
   const { t } = useI18n();
   return (
     <AppShell>
-      <div className="flex flex-col gap-6 px-6 pb-28 pt-12">
+      <div className="safe-top flex flex-col gap-6 px-6 pb-28 pt-12">
         <header className="flex items-center gap-3">
           <Link to="/settings" className="rounded-full p-2 text-muted-foreground hover:bg-card/60 hover:text-foreground">
             <ArrowLeft size={22} />

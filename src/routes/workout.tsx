@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, X } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { CircularTimer } from "../components/CircularTimer";
@@ -7,6 +7,7 @@ import { useProgress } from "../lib/useProgress";
 import { getLevel } from "../lib/program";
 import { useI18n } from "../lib/i18n";
 import { useSettings } from "../lib/useSettings";
+import { hapticImpact, hapticSuccess } from "../lib/haptics";
 
 export const Route = createFileRoute("/workout")({
   head: () => ({
@@ -46,7 +47,6 @@ function buildSteps(
   return steps;
 }
 
-
 function beep(freq = 660, duration = 160) {
   try {
     const AC = (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
@@ -65,10 +65,6 @@ function beep(freq = 660, duration = 160) {
   } catch {}
 }
 
-function vibrate(pattern: number | number[]) {
-  try { navigator.vibrate?.(pattern); } catch {}
-}
-
 function Workout() {
   const navigate = useNavigate();
   const { progress, completeWorkout } = useProgress();
@@ -80,44 +76,75 @@ function Workout() {
     [level],
   );
 
-
   const [stepIdx, setStepIdx] = useState(0);
   const [remaining, setRemaining] = useState(steps[0].duration);
   const [running, setRunning] = useState(true);
   const [done, setDone] = useState(false);
   const completedRef = useRef(false);
 
+  // Frame-accurate timing state kept in refs so ticking never re-renders needlessly.
+  const leftMsRef = useRef(steps[0].duration * 1000);
+  const barRef = useRef<HTMLDivElement | null>(null);
+
   const step = steps[stepIdx];
+  const soundRef = useRef(settings.soundEffects);
+  soundRef.current = settings.soundEffects;
 
+  // New step: reset the clock and fire cue feedback once.
   useEffect(() => {
+    leftMsRef.current = step.duration * 1000;
     setRemaining(step.duration);
-    if (settings.vibration) vibrate(step.mode === "work" ? [80, 40, 80] : 40);
-    if (settings.soundEffects) beep(step.mode === "work" ? 720 : 480, 160);
-  }, [stepIdx, step.duration, step.mode, settings.vibration, settings.soundEffects]);
+    hapticImpact(step.mode === "work" ? "medium" : "light");
+    if (soundRef.current) beep(step.mode === "work" ? 720 : 480, 160);
+  }, [stepIdx, step.duration, step.mode]);
 
+  const advance = useCallback(() => {
+    setStepIdx((i) => {
+      if (i < steps.length - 1) return i + 1;
+      setDone(true);
+      return i;
+    });
+  }, [steps.length]);
+
+  // requestAnimationFrame loop — deadline based, so it never drifts or drops seconds.
   useEffect(() => {
     if (!running || done) return;
-    const id = setInterval(() => {
-      if (remaining > 1) {
-        setRemaining(remaining - 1);
-      } else if (stepIdx < steps.length - 1) {
-        setStepIdx(stepIdx + 1);
-      } else {
-        setDone(true);
-      }
-    }, 1000);
-    return () => clearInterval(id);
-  }, [running, done, stepIdx, steps, remaining]);
+    let raf = 0;
+    const deadline = performance.now() + leftMsRef.current;
+    const totalSteps = steps.length;
 
+    const tick = () => {
+      const left = deadline - performance.now();
+      leftMsRef.current = left;
+      if (left <= 0) {
+        advance();
+        return;
+      }
+      const secs = Math.ceil(left / 1000);
+      setRemaining((prev) => (prev === secs ? prev : secs));
+      if (barRef.current) {
+        const stepDone = 1 - left / (step.duration * 1000);
+        barRef.current.style.transform = `scaleX(${(stepIdx + stepDone) / totalSteps})`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [running, done, stepIdx, steps.length, step.duration, advance]);
 
   useEffect(() => {
     if (done && !completedRef.current) {
       completedRef.current = true;
-      if (settings.vibration) vibrate([120, 80, 120, 80, 240]);
-      if (settings.soundEffects) beep(880, 300);
+      hapticSuccess();
+      if (soundRef.current) beep(880, 300);
       completeWorkout();
     }
-  }, [done, completeWorkout, settings.vibration, settings.soundEffects]);
+  }, [done, completeWorkout]);
+
+  const exit = useCallback(() => {
+    hapticImpact("light");
+    navigate({ to: "/" });
+  }, [navigate]);
 
   if (done) return <CompletionScreen onExit={() => navigate({ to: "/" })} completion={progress.lastCompletion} />;
 
@@ -149,57 +176,64 @@ function Workout() {
   const label = step.mode === "work" ? EX_LABEL[step.exercise] : t("workout.relax");
   const sublabel = step.mode === "work" ? EX_SUBLABEL[step.exercise] : t("workout.release");
   const instr = step.mode === "work" ? EX_INSTR[step.exercise] : t("workout.relaxInstr");
-  const totalSteps = steps.length;
-  const workoutProgress = (stepIdx + (1 - remaining / step.duration)) / totalSteps;
   const stepProgress = 1 - remaining / step.duration;
   const phaseNum = step.phase;
   const phaseTitle = EX_LABEL[step.exercise];
 
-
   return (
     <AppShell hideNav>
-      <div className="flex min-h-screen flex-col px-6 pt-10">
-        <header className="flex items-center justify-between">
+      <div className="safe-top flex min-h-dvh flex-col px-6 pt-10 pb-[max(var(--safe-bottom),1.5rem)]">
+        <header className="flex items-center justify-between gap-3">
           <button
-            onClick={() => navigate({ to: "/" })}
-            className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/60 text-muted-foreground"
+            onClick={exit}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border/60 bg-card/60 text-muted-foreground transition-transform active:scale-95"
             aria-label={t("workout.exit")}
           >
-            <X size={18} />
+            <X size={18} aria-hidden />
           </button>
-          <div className="text-center">
+          <div className="min-w-0 text-center">
             <div className="text-[10px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">
               {t("workout.phaseOf", { n: phaseNum })}
             </div>
-            <div className="mt-0.5 font-display text-sm font-bold">
+            <div className="mt-0.5 truncate font-display text-sm font-bold">
               {phaseTitle} · {t("workout.rep", { a: step.rep, b: level.rounds })}
             </div>
           </div>
           <button
-            onClick={() => setRunning((r) => !r)}
-            className="grid h-10 w-10 place-items-center rounded-full border border-border/60 bg-card/60 text-foreground"
+            onClick={() => {
+              hapticImpact("light");
+              setRunning((r) => !r);
+            }}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border/60 bg-card/60 text-foreground transition-transform active:scale-95"
             aria-label={running ? t("workout.pause") : t("workout.resume")}
           >
-            {running ? <Pause size={18} /> : <Play size={18} />}
+            {running ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
           </button>
         </header>
 
         <div className="mt-6">
           <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
             <div
-              className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500"
-              style={{ width: `${workoutProgress * 100}%` }}
+              ref={barRef}
+              className="h-full origin-left bg-gradient-to-r from-primary to-accent"
+              style={{ transform: "scaleX(0)", width: "100%", willChange: "transform" }}
             />
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center gap-8">
+        <div
+          className="flex flex-1 flex-col items-center justify-center gap-8"
+          role="timer"
+          aria-live="polite"
+          aria-label={`${label} — ${remaining}`}
+        >
           <CircularTimer
             progress={stepProgress}
             secondsLeft={remaining}
             label={label}
             sublabel={sublabel}
             accent={step.mode === "work" ? EX_ACCENT[step.exercise] : "muted"}
+            animate={running}
           />
           <div className="text-center text-sm text-muted-foreground">{instr}</div>
         </div>
@@ -208,7 +242,7 @@ function Workout() {
   );
 }
 
-function CompletionScreen({
+const CompletionScreen = memo(function CompletionScreen({
   onExit,
   completion,
 }: {
@@ -229,11 +263,11 @@ function CompletionScreen({
           });
   return (
     <AppShell hideNav>
-      <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
-        <div className="relative">
+      <div className="safe-top flex min-h-dvh flex-col items-center justify-center gap-6 px-6 pb-[max(var(--safe-bottom),1.5rem)] text-center">
+        <div className="relative animate-scale-in">
           <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl" />
           <div className="relative grid h-28 w-28 place-items-center rounded-full border border-primary/60 bg-card">
-            <span className="font-display text-4xl">✓</span>
+            <span className="font-display text-4xl" aria-hidden>✓</span>
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold">{t("workout.greatJob")}</h1>
@@ -242,8 +276,8 @@ function CompletionScreen({
           <div className="w-full max-w-xs">
             <div className="h-2 overflow-hidden rounded-full bg-secondary">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all"
-                style={{ width: `${(c.leveledUp ? 1 : c.completedInLevel / c.requiredInLevel) * 100}%` }}
+                className="h-full origin-left rounded-full bg-gradient-to-r from-primary to-accent transition-transform duration-700 ease-out"
+                style={{ width: "100%", transform: `scaleX(${c.leveledUp ? 1 : c.completedInLevel / c.requiredInLevel})` }}
               />
             </div>
             <div className="mt-2 text-xs text-muted-foreground">
@@ -258,13 +292,15 @@ function CompletionScreen({
           {t("workout.plusOne")}
         </div>
         <button
-          onClick={onExit}
-          className="mt-2 w-full max-w-xs rounded-2xl bg-primary py-4 font-display text-base font-bold uppercase tracking-widest text-primary-foreground active:scale-[0.98]"
+          onClick={() => {
+            hapticImpact("light");
+            onExit();
+          }}
+          className="mt-2 min-h-12 w-full max-w-xs rounded-2xl bg-primary py-4 font-display text-base font-bold uppercase tracking-widest text-primary-foreground transition-transform active:scale-[0.98]"
         >
           {t("workout.done")}
         </button>
       </div>
     </AppShell>
   );
-}
-
+});

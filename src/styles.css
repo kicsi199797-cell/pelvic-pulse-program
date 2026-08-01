@@ -53,6 +53,7 @@
   --halo: radial-gradient(ellipse at top, oklch(0.55 0.18 245 / 0.1), transparent 70%);
   --shadow-primary: 0 10px 30px -12px oklch(0.55 0.18 245 / 0.45);
   --shadow-card: 0 20px 60px -45px oklch(0.4 0.05 255 / 0.6);
+  --switch-thumb: oklch(1 0 0);
 }
 
 /* Dark mode — premium dark, blue accent, high contrast */
@@ -78,6 +79,7 @@
   --halo: radial-gradient(ellipse at top, oklch(0.62 0.2 245 / 0.18), transparent 70%);
   --shadow-primary: 0 10px 40px -10px oklch(0.72 0.16 235 / 0.7);
   --shadow-card: 0 20px 80px -40px oklch(0.62 0.2 245 / 0.6);
+  --switch-thumb: oklch(0.99 0.004 240);
 }
 
 html, body { background: var(--background); color: var(--foreground); }
@@ -91,4 +93,54 @@ html, body { background: var(--background); color: var(--foreground); }
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+}
+
+/* ---- Native app feel: safe areas, selection, tap highlight, scrolling ---- */
+@layer base {
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Disable text selection everywhere except editable fields */
+  html, body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  input, textarea, select, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* Keep animations GPU-composited and honour reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility safe-top { padding-top: calc(var(--safe-top) + var(--tw-safe-extra, 0px)); }
+@utility safe-bottom { padding-bottom: var(--safe-bottom); }
+@utility safe-x {
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
 }
