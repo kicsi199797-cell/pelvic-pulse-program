@@ -16,6 +16,7 @@ import {
 import { AppShell } from "../components/AppShell";
 import { useSettings, type Appearance } from "../lib/useSettings";
 import { useI18n, SUPPORTED_LANGUAGES, type LanguageCode } from "../lib/i18n";
+import { hapticSelection } from "../lib/haptics";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -45,7 +46,7 @@ function SettingsPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-6 px-6 pb-28 pt-12">
+      <div className="safe-top flex flex-col gap-6 px-6 pb-28 pt-12">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("settings.kicker")}
@@ -61,6 +62,7 @@ function SettingsPage() {
               value={settings.language}
               onChange={(e) => {
                 const code = e.target.value as LanguageCode;
+                hapticSelection();
                 update({ language: code });
                 setLanguage(code);
               }}
@@ -85,6 +87,7 @@ function SettingsPage() {
                 />
               )}
               <Switch
+                label={t("settings.dailyReminder")}
                 checked={settings.reminderEnabled}
                 onChange={() => update({ reminderEnabled: !settings.reminderEnabled })}
               />
@@ -93,6 +96,7 @@ function SettingsPage() {
 
           <Row icon={<Smartphone size={20} />} label={t("settings.vibration")}>
             <Switch
+              label={t("settings.vibration")}
               checked={settings.vibration}
               onChange={() => update({ vibration: !settings.vibration })}
             />
@@ -100,6 +104,7 @@ function SettingsPage() {
 
           <Row icon={<Volume2 size={20} />} label={t("settings.soundEffects")}>
             <Switch
+              label={t("settings.soundEffects")}
               checked={settings.soundEffects}
               onChange={() => update({ soundEffects: !settings.soundEffects })}
             />
@@ -209,8 +214,9 @@ function Switch({ checked, onChange, label }: { checked: boolean; onChange: () =
         }`}
       >
         <span
-          className="absolute left-1 top-1 block h-5 w-5 rounded-full bg-primary-foreground shadow-sm transition-transform duration-200 ease-out"
+          className="absolute left-1 top-1 block h-5 w-5 rounded-full shadow-sm transition-transform duration-200 ease-out"
           style={{
+            backgroundColor: "var(--switch-thumb)",
             transform: `translate3d(${checked ? 20 : 0}px, 0, 0)`,
             willChange: "transform",
             backfaceVisibility: "hidden",
@@ -237,8 +243,12 @@ function SegmentedControl<T extends string>({
         return (
           <button
             key={opt.value}
-            onClick={() => onChange(opt.value)}
-            className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+            onClick={() => {
+              hapticSelection();
+              onChange(opt.value);
+            }}
+            aria-pressed={active}
+            className={`min-h-9 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
               active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >

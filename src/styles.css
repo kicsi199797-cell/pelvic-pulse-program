@@ -53,6 +53,7 @@
   --halo: radial-gradient(ellipse at top, oklch(0.55 0.18 245 / 0.1), transparent 70%);
   --shadow-primary: 0 10px 30px -12px oklch(0.55 0.18 245 / 0.45);
   --shadow-card: 0 20px 60px -45px oklch(0.4 0.05 255 / 0.6);
+  --switch-thumb: oklch(1 0 0);
 }
 
 /* Dark mode — premium dark, blue accent, high contrast */
@@ -78,6 +79,7 @@
   --halo: radial-gradient(ellipse at top, oklch(0.62 0.2 245 / 0.18), transparent 70%);
   --shadow-primary: 0 10px 40px -10px oklch(0.72 0.16 235 / 0.7);
   --shadow-card: 0 20px 80px -40px oklch(0.62 0.2 245 / 0.6);
+  --switch-thumb: oklch(0.99 0.004 240);
 }
 
 html, body { background: var(--background); color: var(--foreground); }
