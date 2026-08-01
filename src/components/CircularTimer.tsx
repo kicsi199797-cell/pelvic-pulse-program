@@ -1,9 +1,13 @@
+import { memo } from "react";
+
 type Props = {
   progress: number; // 0..1
   secondsLeft: number;
   label: string;
   sublabel?: string;
   accent?: "primary" | "muted" | "success" | "warning";
+  /** When false the ring stops animating (paused state) to avoid drift. */
+  animate?: boolean;
 };
 
 const ACCENT_COLORS: Record<NonNullable<Props["accent"]>, string> = {
@@ -13,7 +17,14 @@ const ACCENT_COLORS: Record<NonNullable<Props["accent"]>, string> = {
   warning: "var(--warning)",
 };
 
-export function CircularTimer({ progress, secondsLeft, label, sublabel, accent = "primary" }: Props) {
+export const CircularTimer = memo(function CircularTimer({
+  progress,
+  secondsLeft,
+  label,
+  sublabel,
+  accent = "primary",
+  animate = true,
+}: Props) {
   const size = 280;
   const stroke = 14;
   const r = (size - stroke) / 2;
@@ -21,14 +32,14 @@ export function CircularTimer({ progress, secondsLeft, label, sublabel, accent =
   const offset = c * (1 - Math.max(0, Math.min(1, progress)));
   const color = ACCENT_COLORS[accent];
 
-
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
       <div
         className="absolute inset-4 rounded-full blur-2xl opacity-40"
         style={{ background: `radial-gradient(circle, ${color}, transparent 70%)` }}
+        aria-hidden
       />
-      <svg width={size} height={size} className="-rotate-90">
+      <svg width={size} height={size} className="-rotate-90" aria-hidden focusable="false">
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -47,7 +58,10 @@ export function CircularTimer({ progress, secondsLeft, label, sublabel, accent =
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={offset}
-          style={{ transition: "stroke-dashoffset 1s linear" }}
+          style={{
+            transition: animate ? "stroke-dashoffset 1s linear" : "none",
+            willChange: "stroke-dashoffset",
+          }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -60,8 +74,7 @@ export function CircularTimer({ progress, secondsLeft, label, sublabel, accent =
         <div className="mt-1 text-sm font-medium uppercase tracking-widest" style={{ color }}>
           {label}
         </div>
-
       </div>
     </div>
   );
-}
+});
