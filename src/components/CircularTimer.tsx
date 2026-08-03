@@ -73,17 +73,24 @@ export const CircularTimer = memo(function CircularTimer({
           }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+        <div className="w-full truncate text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
           {sublabel}
         </div>
-        <div className="mt-2 font-display text-7xl font-bold tabular-nums text-foreground">
+        <div
+          className="mt-1 font-display font-bold leading-none tabular-nums text-foreground"
+          style={{ fontSize: "clamp(3rem, 18vw, 4.5rem)" }}
+        >
           {secondsLeft}
         </div>
-        <div className="mt-1 text-sm font-medium uppercase tracking-widest" style={{ color }}>
+        <div
+          className="mt-1 w-full truncate text-sm font-medium uppercase tracking-widest"
+          style={{ color }}
+        >
           {label}
         </div>
       </div>
+
     </div>
   );
 });
