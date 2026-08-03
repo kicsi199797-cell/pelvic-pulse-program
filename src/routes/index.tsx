@@ -135,10 +135,11 @@ function Home() {
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   const { formatNumber } = useI18n();
   return (
-    <div className="rounded-2xl border border-border/60 bg-card/60 p-4">
+    <div className="flex min-w-0 flex-col rounded-2xl border border-border/60 bg-card/60 p-3">
       <div className="text-primary">{icon}</div>
-      <div className="mt-2 font-display text-2xl font-bold tabular-nums">{formatNumber(value)}</div>
-      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="mt-2 font-display text-xl font-bold leading-none tabular-nums">{formatNumber(value)}</div>
+      <div className="mt-1 text-[10px] uppercase leading-tight tracking-wide text-muted-foreground">{label}</div>
     </div>
   );
 }
+
