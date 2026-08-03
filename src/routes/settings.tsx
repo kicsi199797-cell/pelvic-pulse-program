@@ -110,7 +110,7 @@ function SettingsPage() {
             />
           </Row>
 
-          <Row icon={<Moon size={20} />} label={t("settings.appearance")}>
+          <StackedRow icon={<Moon size={20} />} label={t("settings.appearance")}>
             <SegmentedControl
               value={settings.appearance}
               options={[
@@ -120,7 +120,7 @@ function SettingsPage() {
               ]}
               onChange={(v) => update({ appearance: v as Appearance })}
             />
-          </Row>
+          </StackedRow>
         </section>
 
         <section className="flex flex-col gap-3">
@@ -176,6 +176,18 @@ function Row({ icon, label, children }: { icon: React.ReactNode; label: string; 
         <span className="min-w-0 text-sm font-medium leading-tight">{label}</span>
       </div>
       <div className="flex shrink-0 items-center">{children}</div>
+    </div>
+  );
+}
+
+function StackedRow({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-border/60 bg-card/60 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="shrink-0 text-primary">{icon}</div>
+        <span className="min-w-0 text-sm font-medium leading-tight">{label}</span>
+      </div>
+      <div className="mt-3">{children}</div>
     </div>
   );
 }
@@ -237,7 +249,7 @@ function SegmentedControl<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className="flex shrink-0 rounded-xl border border-border/60 bg-background p-1">
+    <div className="grid w-full grid-cols-3 gap-1 rounded-xl border border-border/60 bg-background p-1">
       {options.map((opt) => {
         const active = value === opt.value;
         return (
@@ -248,7 +260,7 @@ function SegmentedControl<T extends string>({
               onChange(opt.value);
             }}
             aria-pressed={active}
-            className={`min-h-9 shrink-0 whitespace-nowrap rounded-lg px-2 py-1.5 text-[11px] font-medium transition-colors duration-150 active:opacity-70 ${
+            className={`min-h-10 truncate rounded-lg px-2 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
               active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
