@@ -17,17 +17,18 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
       <main className={`relative flex-1 ${hideNav ? "" : "pb-28"}`}>{children}</main>
       {!hideNav && (
         <nav
-          className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl"
-          style={{ paddingBottom: "var(--safe-bottom)" }}
+          className="safe-x fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl"
+          style={{ paddingBottom: "max(var(--safe-bottom), 0.25rem)" }}
           aria-label={t("nav.train")}
         >
-          <div className="grid grid-cols-3 py-1.5">
+          <div className="grid grid-cols-3 py-1">
             <NavItem to="/" active={pathname === "/"} icon={<Home size={20} />} label={t("nav.train")} />
             <NavItem to="/progress" active={pathname === "/progress"} icon={<BarChart3 size={20} />} label={t("nav.progress")} />
             <NavItem to="/learn" active={pathname === "/learn"} icon={<BookOpen size={20} />} label={t("nav.learn")} />
           </div>
         </nav>
       )}
+
     </div>
   );
 }
