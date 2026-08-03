@@ -33,13 +33,22 @@ export const CircularTimer = memo(function CircularTimer({
   const color = ACCENT_COLORS[accent];
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div
+      className="relative flex aspect-square w-full items-center justify-center"
+      style={{ maxWidth: size, maxHeight: "min(280px, 44vh)" }}
+    >
       <div
         className="absolute inset-4 rounded-full blur-2xl opacity-40"
         style={{ background: `radial-gradient(circle, ${color}, transparent 70%)` }}
         aria-hidden
       />
-      <svg width={size} height={size} className="-rotate-90" aria-hidden focusable="false">
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="-rotate-90 h-full w-full"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden
+        focusable="false"
+      >
         <circle
           cx={size / 2}
           cy={size / 2}
