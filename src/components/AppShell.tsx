@@ -49,12 +49,13 @@ const NavItem = memo(function NavItem({
       to={to}
       onClick={() => hapticSelection()}
       aria-current={active ? "page" : undefined}
-      className={`flex min-h-12 flex-col items-center justify-center gap-1 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
+      className={`flex min-h-12 min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[11px] font-medium leading-tight transition-colors duration-150 active:opacity-70 ${
         active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >
-      <span aria-hidden>{icon}</span>
-      <span>{label}</span>
+      <span className="shrink-0" aria-hidden>{icon}</span>
+      <span className="w-full truncate text-center">{label}</span>
     </Link>
+
   );
 });
