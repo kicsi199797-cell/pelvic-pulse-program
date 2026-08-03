@@ -46,12 +46,12 @@ function SettingsPage() {
 
   return (
     <AppShell>
-      <div className="safe-top flex flex-col gap-6 px-6 pb-28 pt-12">
+      <div className="pad-x safe-top flex flex-col gap-6 pb-28 pt-10">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("settings.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">{t("settings.title")}</h1>
+          <h1 className="mt-1 font-display text-2xl font-bold leading-tight sm:text-3xl">{t("settings.title")}</h1>
         </header>
 
         <section className="flex flex-col gap-3">
@@ -66,7 +66,7 @@ function SettingsPage() {
                 update({ language: code });
                 setLanguage(code);
               }}
-              className="max-w-[10rem] rounded-lg border border-border/60 bg-background px-2 py-1 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
+              className="h-10 max-w-[9.5rem] shrink-0 truncate rounded-lg border border-border/60 bg-background px-2 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
             >
               {SUPPORTED_LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>
@@ -83,7 +83,7 @@ function SettingsPage() {
                   type="time"
                   value={settings.reminderTime}
                   onChange={(e) => update({ reminderTime: e.target.value })}
-                  className="rounded-lg border border-border/60 bg-background px-2 py-1 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
+                  className="h-10 shrink-0 rounded-lg border border-border/60 bg-background px-2 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
                 />
               )}
               <Switch
@@ -133,24 +133,24 @@ function SettingsPage() {
 
           <button
             onClick={() => alert(t("settings.rateAlert"))}
-            className="group flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4 text-left transition-colors hover:bg-card"
+            className="group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/60 px-4 py-3 text-left transition-colors hover:bg-card"
           >
-            <div className="flex items-center gap-3">
-              <div className="text-primary"><Star size={20} /></div>
-              <span className="text-sm font-medium">{t("settings.rate")}</span>
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="shrink-0 text-primary"><Star size={20} /></div>
+              <span className="min-w-0 text-sm font-medium leading-tight">{t("settings.rate")}</span>
             </div>
-            <ChevronRight size={18} className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+            <ChevronRight size={18} className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
           </button>
 
           <a
             href="mailto:support@staminatrainer.app?subject=Stamina%20Trainer%20Support"
-            className="group flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4 text-left transition-colors hover:bg-card"
+            className="group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/60 px-4 py-3 text-left transition-colors hover:bg-card"
           >
-            <div className="flex items-center gap-3">
-              <div className="text-primary"><Mail size={20} /></div>
-              <span className="text-sm font-medium">{t("settings.contact")}</span>
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="shrink-0 text-primary"><Mail size={20} /></div>
+              <span className="min-w-0 text-sm font-medium leading-tight">{t("settings.contact")}</span>
             </div>
-            <ChevronRight size={18} className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+            <ChevronRight size={18} className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
           </a>
         </section>
 
@@ -170,12 +170,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Row({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4">
-      <div className="flex items-center gap-3">
-        <div className="text-primary">{icon}</div>
-        <span className="text-sm font-medium">{label}</span>
+    <div className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/60 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="shrink-0 text-primary">{icon}</div>
+        <span className="min-w-0 text-sm font-medium leading-tight">{label}</span>
       </div>
-      {children}
+      <div className="flex shrink-0 items-center">{children}</div>
     </div>
   );
 }
@@ -184,13 +184,13 @@ function LinkRow({ icon, label, to }: { icon: React.ReactNode; label: string; to
   return (
     <Link
       to={to}
-      className="group flex items-center justify-between rounded-2xl border border-border/60 bg-card/60 p-4 transition-colors hover:bg-card"
+      className="group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/60 px-4 py-3 transition-colors hover:bg-card"
     >
-      <div className="flex items-center gap-3">
-        <div className="text-primary">{icon}</div>
-        <span className="text-sm font-medium">{label}</span>
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="shrink-0 text-primary">{icon}</div>
+        <span className="min-w-0 text-sm font-medium leading-tight">{label}</span>
       </div>
-      <ChevronRight size={18} className="text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+      <ChevronRight size={18} className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
     </Link>
   );
 }
@@ -237,7 +237,7 @@ function SegmentedControl<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className="flex rounded-xl border border-border/60 bg-background p-1">
+    <div className="flex shrink-0 rounded-xl border border-border/60 bg-background p-1">
       {options.map((opt) => {
         const active = value === opt.value;
         return (
@@ -248,7 +248,7 @@ function SegmentedControl<T extends string>({
               onChange(opt.value);
             }}
             aria-pressed={active}
-            className={`min-h-9 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
+            className={`min-h-9 shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
               active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >

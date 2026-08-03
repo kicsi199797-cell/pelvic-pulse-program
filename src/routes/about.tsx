@@ -19,13 +19,13 @@ function AboutPage() {
   const { t } = useI18n();
   return (
     <AppShell>
-      <div className="safe-top flex flex-col gap-6 px-6 pb-28 pt-12">
+      <div className="pad-x safe-top flex flex-col gap-6 pb-28 pt-10">
         <header className="flex items-center gap-3">
           <Link to="/settings" className="rounded-full p-2 text-muted-foreground hover:bg-card/60 hover:text-foreground">
             <ArrowLeft size={22} />
           </Link>
           <div>
-            <h1 className="font-display text-3xl font-bold">{t("about.title")}</h1>
+            <h1 className="font-display text-2xl font-bold leading-tight sm:text-3xl">{t("about.title")}</h1>
           </div>
         </header>
 
