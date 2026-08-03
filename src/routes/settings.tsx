@@ -248,7 +248,7 @@ function SegmentedControl<T extends string>({
               onChange(opt.value);
             }}
             aria-pressed={active}
-            className={`min-h-9 shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
+            className={`min-h-9 shrink-0 whitespace-nowrap rounded-lg px-2 py-1.5 text-[11px] font-medium transition-colors duration-150 active:opacity-70 ${
               active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
