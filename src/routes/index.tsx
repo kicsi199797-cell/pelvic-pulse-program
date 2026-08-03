@@ -37,34 +37,35 @@ function Home() {
 
   return (
     <AppShell>
-      <div className="safe-top flex flex-col gap-8 px-6 pt-12">
-        <header className="flex items-center justify-between">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+      <div className="pad-x safe-top flex flex-col gap-8 pt-10">
+        <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div className="min-w-0">
+            <div className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
               {t("home.brand")}
             </div>
-            <h1 className="mt-1 font-display text-2xl font-bold">
+            <h1 className="mt-1 font-display text-xl font-bold leading-tight sm:text-2xl">
               {t("home.levelOf", { n: formatNumber(progress.currentLevel), total: TOTAL_LEVELS })}
             </h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               to="/settings"
               onClick={() => hapticImpact("light")}
-              className="grid h-11 w-11 place-items-center rounded-full border border-border/60 bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border/60 bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
               aria-label={t("home.settings")}
             >
               <Settings size={20} />
             </Link>
-            <div className="rounded-full border border-border/60 bg-card/70 px-4 py-2 text-right">
+            <div className="shrink-0 rounded-full border border-border/60 bg-card/70 px-3 py-1.5 text-right">
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("home.level")}</div>
-              <div className="font-display text-lg font-bold text-primary">
+              <div className="font-display text-base font-bold leading-tight text-primary">
                 {String(progress.currentLevel).padStart(2, "0")}
                 <span className="text-muted-foreground">/{TOTAL_LEVELS}</span>
               </div>
             </div>
           </div>
         </header>
+
 
         <section>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
