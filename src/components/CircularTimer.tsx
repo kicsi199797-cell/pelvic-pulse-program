@@ -33,13 +33,22 @@ export const CircularTimer = memo(function CircularTimer({
   const color = ACCENT_COLORS[accent];
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div
+      className="relative flex aspect-square w-full items-center justify-center"
+      style={{ maxWidth: size, maxHeight: "min(280px, 44vh)" }}
+    >
       <div
         className="absolute inset-4 rounded-full blur-2xl opacity-40"
         style={{ background: `radial-gradient(circle, ${color}, transparent 70%)` }}
         aria-hidden
       />
-      <svg width={size} height={size} className="-rotate-90" aria-hidden focusable="false">
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="-rotate-90 h-full w-full"
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden
+        focusable="false"
+      >
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -64,17 +73,24 @@ export const CircularTimer = memo(function CircularTimer({
           }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+        <div className="w-full truncate text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
           {sublabel}
         </div>
-        <div className="mt-2 font-display text-7xl font-bold tabular-nums text-foreground">
+        <div
+          className="mt-1 font-display font-bold leading-none tabular-nums text-foreground"
+          style={{ fontSize: "clamp(3rem, 18vw, 4.5rem)" }}
+        >
           {secondsLeft}
         </div>
-        <div className="mt-1 text-sm font-medium uppercase tracking-widest" style={{ color }}>
+        <div
+          className="mt-1 w-full truncate text-sm font-medium uppercase tracking-widest"
+          style={{ color }}
+        >
           {label}
         </div>
       </div>
+
     </div>
   );
 });

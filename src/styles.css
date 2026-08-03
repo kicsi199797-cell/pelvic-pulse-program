@@ -144,3 +144,32 @@ html, body { background: var(--background); color: var(--foreground); }
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
 }
+
+/* ---- Cross-platform (Android/iOS) layout consistency ---- */
+@layer base {
+  :root {
+    /* Android WebView reports 0 insets when not edge-to-edge; keep a small floor
+       so headers never sit flush against the status bar. */
+    --safe-top: max(env(safe-area-inset-top, 0px), 0px);
+    --safe-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
+    --gutter: clamp(1rem, 5vw, 1.5rem);
+  }
+
+  /* Android font scaling can push long translations out of their containers. */
+  h1, h2, h3, p, span, div, li, label, button, a {
+    overflow-wrap: break-word;
+  }
+
+  /* Chrome/Android renders form controls taller than iOS by default. */
+  input, select, textarea, button {
+    font: inherit;
+    line-height: 1.2;
+  }
+  select { -webkit-appearance: none; appearance: none; }
+
+  /* Avoid text-size-adjust inflation inside the Android WebView. */
+  body { text-rendering: optimizeLegibility; }
+}
+
+/* Fluid horizontal gutter so 320px-wide Android phones keep content readable. */
+@utility pad-x { padding-left: var(--gutter); padding-right: var(--gutter); }

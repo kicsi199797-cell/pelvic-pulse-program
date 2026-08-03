@@ -17,17 +17,18 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
       <main className={`relative flex-1 ${hideNav ? "" : "pb-28"}`}>{children}</main>
       {!hideNav && (
         <nav
-          className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl"
-          style={{ paddingBottom: "var(--safe-bottom)" }}
+          className="safe-x fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl"
+          style={{ paddingBottom: "max(var(--safe-bottom), 0.25rem)" }}
           aria-label={t("nav.train")}
         >
-          <div className="grid grid-cols-3 py-1.5">
+          <div className="grid grid-cols-3 py-1">
             <NavItem to="/" active={pathname === "/"} icon={<Home size={20} />} label={t("nav.train")} />
             <NavItem to="/progress" active={pathname === "/progress"} icon={<BarChart3 size={20} />} label={t("nav.progress")} />
             <NavItem to="/learn" active={pathname === "/learn"} icon={<BookOpen size={20} />} label={t("nav.learn")} />
           </div>
         </nav>
       )}
+
     </div>
   );
 }
@@ -48,12 +49,13 @@ const NavItem = memo(function NavItem({
       to={to}
       onClick={() => hapticSelection()}
       aria-current={active ? "page" : undefined}
-      className={`flex min-h-12 flex-col items-center justify-center gap-1 py-1.5 text-xs font-medium transition-colors duration-150 active:opacity-70 ${
+      className={`flex min-h-12 min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[11px] font-medium leading-tight transition-colors duration-150 active:opacity-70 ${
         active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >
-      <span aria-hidden>{icon}</span>
-      <span>{label}</span>
+      <span className="shrink-0" aria-hidden>{icon}</span>
+      <span className="w-full truncate text-center">{label}</span>
     </Link>
+
   );
 });

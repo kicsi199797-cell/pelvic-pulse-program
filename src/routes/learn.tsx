@@ -19,12 +19,12 @@ function LearnPage() {
   const { t } = useI18n();
   return (
     <AppShell>
-      <div className="safe-top flex flex-col gap-5 px-6 pb-12 pt-12">
+      <div className="pad-x safe-top flex flex-col gap-5 pb-12 pt-10">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("learn.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">{t("learn.title")}</h1>
+          <h1 className="mt-1 font-display text-2xl font-bold leading-tight sm:text-3xl">{t("learn.title")}</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("learn.subtitle")}</p>
         </header>
 
@@ -62,7 +62,7 @@ function LearnPage() {
 
         <Link
           to="/"
-          className="mt-4 flex w-full items-center justify-center rounded-2xl bg-primary py-5 font-display text-lg font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
+          className="mt-4 flex min-h-14 w-full items-center justify-center rounded-2xl bg-primary px-4 py-4 text-center font-display text-base font-bold uppercase tracking-widest text-primary-foreground [box-shadow:var(--shadow-primary)] transition-transform active:scale-[0.98]"
         >
           {t("learn.start")}
         </Link>
@@ -83,12 +83,12 @@ function Card({
   bullets?: string[];
 }) {
   return (
-    <div className="rounded-3xl border border-border/60 bg-card/60 p-5">
-      <div className="mb-3 flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl border border-border/60 bg-background/60">
+    <div className="rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-5">
+      <div className="mb-3 flex min-w-0 items-center gap-3">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-border/60 bg-background/60">
           {icon}
         </div>
-        <h2 className="font-display text-lg font-bold leading-tight">{title}</h2>
+        <h2 className="min-w-0 font-display text-base font-bold leading-tight sm:text-lg">{title}</h2>
       </div>
       {body && <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>}
       {bullets && (

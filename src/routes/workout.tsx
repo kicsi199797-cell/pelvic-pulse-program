@@ -182,7 +182,7 @@ function Workout() {
 
   return (
     <AppShell hideNav>
-      <div className="safe-top flex min-h-dvh flex-col px-6 pt-10 pb-[max(var(--safe-bottom),1.5rem)]">
+      <div className="pad-x safe-top flex min-h-dvh flex-col pt-8 pb-[max(var(--safe-bottom),1.5rem)]">
         <header className="flex items-center justify-between gap-3">
           <button
             onClick={exit}
@@ -222,7 +222,7 @@ function Workout() {
         </div>
 
         <div
-          className="flex flex-1 flex-col items-center justify-center gap-8"
+          className="flex w-full flex-1 flex-col items-center justify-center gap-6"
           role="timer"
           aria-live="polite"
           aria-label={`${label} — ${remaining}`}
@@ -235,7 +235,7 @@ function Workout() {
             accent={step.mode === "work" ? EX_ACCENT[step.exercise] : "muted"}
             animate={running}
           />
-          <div className="text-center text-sm text-muted-foreground">{instr}</div>
+          <div className="max-w-xs text-balance text-center text-sm leading-relaxed text-muted-foreground">{instr}</div>
         </div>
       </div>
     </AppShell>
@@ -263,14 +263,14 @@ const CompletionScreen = memo(function CompletionScreen({
           });
   return (
     <AppShell hideNav>
-      <div className="safe-top flex min-h-dvh flex-col items-center justify-center gap-6 px-6 pb-[max(var(--safe-bottom),1.5rem)] text-center">
+      <div className="safe-top flex min-h-dvh flex-col items-center justify-center gap-5 px-6 pb-[max(var(--safe-bottom),1.5rem)] text-center">
         <div className="relative animate-scale-in">
           <div className="absolute inset-0 rounded-full bg-primary/30 blur-3xl" />
-          <div className="relative grid h-28 w-28 place-items-center rounded-full border border-primary/60 bg-card">
+          <div className="relative grid h-24 w-24 place-items-center rounded-full border border-primary/60 bg-card">
             <span className="font-display text-4xl" aria-hidden>✓</span>
           </div>
         </div>
-        <h1 className="font-display text-3xl font-bold">{t("workout.greatJob")}</h1>
+        <h1 className="font-display text-2xl font-bold leading-tight sm:text-3xl">{t("workout.greatJob")}</h1>
         <p className="max-w-xs text-muted-foreground">{message}</p>
         {c && (
           <div className="w-full max-w-xs">

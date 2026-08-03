@@ -30,12 +30,12 @@ function ProgressPage() {
 
   return (
     <AppShell>
-      <div className="safe-top flex flex-col gap-6 px-6 pt-12">
+      <div className="pad-x safe-top flex flex-col gap-6 pt-10">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("progress.kicker")}
           </div>
-          <h1 className="mt-1 font-display text-3xl font-bold">{t("progress.title")}</h1>
+          <h1 className="mt-1 font-display text-2xl font-bold leading-tight sm:text-3xl">{t("progress.title")}</h1>
         </header>
 
         <div className="grid grid-cols-2 gap-3">
@@ -65,7 +65,7 @@ function ProgressPage() {
               return (
                 <div
                   key={l.level}
-                  className={`flex items-center justify-between rounded-2xl border p-4 ${
+                  className={`flex items-center justify-between gap-3 rounded-2xl border p-3.5 ${
                     current
                       ? "border-primary/60 bg-primary/10"
                       : completed
@@ -73,7 +73,7 @@ function ProgressPage() {
                         : "border-border/40 bg-card/30 opacity-60"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
                     <div
                       className={`grid h-10 w-10 place-items-center rounded-xl font-display font-bold ${
                         completed
@@ -85,8 +85,8 @@ function ProgressPage() {
                     >
                       {completed ? <Check size={18} /> : locked ? <Lock size={14} /> : l.level}
                     </div>
-                    <div>
-                      <div className="font-display text-base font-bold">{t("progress.levelN", { n: l.level })}</div>
+                    <div className="min-w-0">
+                      <div className="font-display text-sm font-bold leading-tight">{t("progress.levelN", { n: l.level })}</div>
                       <div className="text-xs text-muted-foreground">
                         {t("progress.holdRest", { h: l.holdWork, r: l.holdRest })} · {t("progress.required", { n: requiredWorkouts(l.level) })}
                       </div>
@@ -94,7 +94,7 @@ function ProgressPage() {
                     </div>
                   </div>
                   {current && (
-                    <div className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
+                    <div className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
                       {t("progress.active")}
                     </div>
                   )}
@@ -108,7 +108,7 @@ function ProgressPage() {
           onClick={() => {
             if (confirm(t("progress.resetConfirm"))) reset();
           }}
-          className="mt-2 rounded-2xl border border-border/60 bg-card/40 py-3 text-sm text-muted-foreground hover:text-foreground"
+          className="mt-2 min-h-12 rounded-2xl border border-border/60 bg-card/40 px-4 py-3 text-sm text-muted-foreground hover:text-foreground"
         >
           {t("progress.reset")}
         </button>
@@ -119,9 +119,9 @@ function ProgressPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border/60 bg-card/60 p-4">
-      <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div className="mt-1 font-display text-2xl font-bold tabular-nums">{value}</div>
+    <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-border/60 bg-card/60 p-3.5">
+      <div className="text-[10px] uppercase leading-tight tracking-wide text-muted-foreground">{label}</div>
+      <div className="mt-1 font-display text-xl font-bold leading-none tabular-nums">{value}</div>
     </div>
   );
 }
