@@ -157,7 +157,8 @@ test.describe("Settings screen", () => {
 
   test("the last row is not hidden behind the bottom tab bar", async ({ page }) => {
     const last = page.getByText("Contact Support", { exact: true });
-    await last.scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(150);
     const navBox = await page.getByRole("navigation").boundingBox();
     const lastBox = await last.boundingBox();
     expect(lastBox && navBox).toBeTruthy();
