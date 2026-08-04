@@ -95,9 +95,12 @@ export function getSettings(): Settings {
 
 export function useSettings() {
   const settings = useSyncExternalStore(subscribe, getSnapshot, () => serverSnapshot);
+  // Hydration flag must be false on the first client render so SSR markup matches.
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     ensureLoaded();
+    setHydrated(true);
     const onStorage = (e: StorageEvent) => {
       if (e.key === KEY) {
         current = load();
