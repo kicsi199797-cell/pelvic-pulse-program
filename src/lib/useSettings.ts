@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { detectBrowserLanguage, isSupportedLanguage, type LanguageCode } from "./i18n";
 
 const KEY = "stamina-trainer-settings-v1";
@@ -95,9 +95,12 @@ export function getSettings(): Settings {
 
 export function useSettings() {
   const settings = useSyncExternalStore(subscribe, getSnapshot, () => serverSnapshot);
+  // Hydration flag must be false on the first client render so SSR markup matches.
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     ensureLoaded();
+    setHydrated(true);
     const onStorage = (e: StorageEvent) => {
       if (e.key === KEY) {
         current = load();
@@ -116,6 +119,6 @@ export function useSettings() {
     setSettings(makeInitial(detectBrowserLanguage()));
   }, []);
 
-  return { settings, hydrated: initialized, update, reset };
+  return { settings, hydrated, update, reset };
 }
 
