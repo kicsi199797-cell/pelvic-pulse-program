@@ -8,20 +8,20 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
  * declared in playwright.config.ts.
  */
 
-const SWITCH_ROWS = ["Daily reminder", "Vibration", "Sound effects"];
+const SWITCH_ROWS = ["Daily Reminder", "Vibration", "Sound Effects"];
 
 const ROW_LABELS = [
   "Language",
-  "Daily reminder",
+  "Daily Reminder",
   "Vibration",
-  "Sound effects",
+  "Sound Effects",
   "Appearance",
-  "Training statistics",
+  "Training Statistics",
   "About",
-  "Privacy policy",
-  "Terms of use",
-  "Rate the app",
-  "Contact support",
+  "Privacy Policy",
+  "Terms of Use",
+  "Rate the App",
+  "Contact Support",
 ];
 
 type Box = { x: number; y: number; width: number; height: number };
@@ -156,7 +156,7 @@ test.describe("Settings screen", () => {
   });
 
   test("the last row is not hidden behind the bottom tab bar", async ({ page }) => {
-    const last = page.getByText("Contact support", { exact: true });
+    const last = page.getByText("Contact Support", { exact: true });
     await last.scrollIntoViewIfNeeded();
     const navBox = await page.getByRole("navigation").boundingBox();
     const lastBox = await last.boundingBox();
