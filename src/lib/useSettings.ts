@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { detectBrowserLanguage, isSupportedLanguage, type LanguageCode } from "./i18n";
 
 const KEY = "stamina-trainer-settings-v1";
