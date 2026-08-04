@@ -119,6 +119,6 @@ export function useSettings() {
     setSettings(makeInitial(detectBrowserLanguage()));
   }, []);
 
-  return { settings, hydrated: initialized, update, reset };
+  return { settings, hydrated, update, reset };
 }
 
