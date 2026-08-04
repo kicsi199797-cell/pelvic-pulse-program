@@ -173,3 +173,11 @@ html, body { background: var(--background); color: var(--foreground); }
 
 /* Fluid horizontal gutter so 320px-wide Android phones keep content readable. */
 @utility pad-x { padding-left: var(--gutter); padding-right: var(--gutter); }
+
+/* Bottom padding that always clears the fixed tab bar + Android/iOS home indicator. */
+@utility pb-nav { padding-bottom: calc(5.5rem + var(--safe-bottom)); }
+
+/* Android WebViews often lack flag emoji glyphs; keep list rows on a fixed rhythm. */
+@layer base {
+  select option { font-family: var(--font-sans); }
+}

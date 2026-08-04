@@ -14,7 +14,7 @@ export function AppShell({ children, hideNav = false }: { children: ReactNode; h
         style={{ background: "var(--halo)", willChange: "opacity" }}
         aria-hidden
       />
-      <main className={`relative flex-1 ${hideNav ? "" : "pb-28"}`}>{children}</main>
+      <main className={`relative flex-1 ${hideNav ? "" : "pb-nav"}`}>{children}</main>
       {!hideNav && (
         <nav
           className="safe-x fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 border-t border-border/60 bg-background/85 backdrop-blur-xl"

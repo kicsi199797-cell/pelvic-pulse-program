@@ -46,7 +46,7 @@ function SettingsPage() {
 
   return (
     <AppShell>
-      <div className="pad-x safe-top flex flex-col gap-6 pb-28 pt-10">
+      <div className="pad-x safe-top pb-nav flex flex-col gap-6 pt-10">
         <header>
           <div className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             {t("settings.kicker")}
@@ -66,11 +66,11 @@ function SettingsPage() {
                 update({ language: code });
                 setLanguage(code);
               }}
-              className="h-10 max-w-[9.5rem] shrink-0 truncate rounded-lg border border-border/60 bg-background px-2 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
+              className="h-10 max-w-[9.5rem] shrink-0 truncate rounded-lg border border-border/60 bg-background px-2 text-sm leading-none text-foreground outline-none focus:ring-1 focus:ring-ring"
             >
               {SUPPORTED_LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>
-                  {l.flag} {l.label}
+                  {l.label}
                 </option>
               ))}
             </select>
