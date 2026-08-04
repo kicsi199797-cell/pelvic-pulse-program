@@ -66,11 +66,11 @@ function SettingsPage() {
                 update({ language: code });
                 setLanguage(code);
               }}
-              className="h-10 max-w-[9.5rem] shrink-0 truncate rounded-lg border border-border/60 bg-background px-2 text-sm text-foreground outline-none focus:ring-1 focus:ring-ring"
+              className="h-10 max-w-[9.5rem] shrink-0 truncate rounded-lg border border-border/60 bg-background px-2 text-sm leading-none text-foreground outline-none focus:ring-1 focus:ring-ring"
             >
               {SUPPORTED_LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>
-                  {l.flag} {l.label}
+                  {l.label}
                 </option>
               ))}
             </select>
